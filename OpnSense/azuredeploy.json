@@ -40,7 +40,7 @@
 			"type": "string",
 			"defaultValue": "00",
 			"metadata": {
-				"description": "Network CIDR octet, check available address list from the corresponding documenation"
+				"description": "Network CIDR octet, check available address list from the corresponding documenation https://pgga-es.atlassian.net/wiki/spaces/NPD/pages/1820689753/nMarket+NewSec+Infrastructure+IP-Subnets-Networking"
 			}
 		},
 		"PublicIPAddressSku": {
@@ -78,15 +78,16 @@
 	},
 	"variables": {
 		"extensionName":"CustomScript",
-		"virtualNetworkName": "[concat(resourceGroup(),'-vnet')]",
-		"virtualMachineName": "[concat(resourceGroup(),parameters('virtualMachineNumber'))]",
-		"nic1": "[concat(variables('virtualMachineName'),'-nic1')]",
-		"nic2": "[concat(variables('virtualMachineName'),'-nic2')]",
-		"subnetAddressSpace": "[concat('10.',parameters('NetworkCIDROctet'),'.0.0/16')]",
-		"subnetGatewaySubnet": "[concat('10.',parameters('NetworkCIDROctet'),'.0.128/26')]",
-		"subnetfirewall-frontend": "[concat('10.',parameters('NetworkCIDROctet'),'.0.0/27')]",
-		"subnetmanagement": "[concat('10.',parameters('NetworkCIDROctet'),'.0.64/26')]",
-		"subnetfirewall-backend": "[concat('10.',parameters('NetworkCIDROctet'),'.0.32/27')]",
+		"RGName": "[toLower(resourceGroup().name)]",
+		"virtualNetworkName": "[concat(uniqueString(resourceGroup().name, '-vnet')]",
+		"virtualMachineName": "[concat(uniqueString(resourceGroup().name, parameters('virtualMachineNumber'))]",
+		"nic1": "[concat(variables('virtualMachineName'), '-nic1')]",
+		"nic2": "[concat(variables('virtualMachineName'), '-nic2')]",
+		"subnetAddressSpace": "[concat('10.',parameters('NetworkCIDROctet'), '.0.0/16')]",
+		"subnetGatewaySubnet": "[concat('10.',parameters('NetworkCIDROctet'), '.0.128/26')]",
+		"subnetfirewall-frontend": "[concat('10.',parameters('NetworkCIDROctet'), '.0.0/27')]",
+		"subnetmanagement": "[concat('10.',parameters('NetworkCIDROctet'), '.0.64/26')]",
+		"subnetfirewall-backend": "[concat('10.', parameters('NetworkCIDROctet'), '.0.32/27')]",
 		"subnet1Name": "[parameters('GatewaySubnet')]",
 		"subnet2Name": "[parameters('firewall-frontend')]",
 		"subnet3Name": "[parameters('management')]",
