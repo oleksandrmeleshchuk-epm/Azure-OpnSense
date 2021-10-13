@@ -88,10 +88,10 @@
 		"subnetfirewall-frontend": "[concat('10.',parameters('NetworkCIDROctet'), '.0.0/27')]",
 		"subnetmanagement": "[concat('10.',parameters('NetworkCIDROctet'), '.0.64/26')]",
 		"subnetfirewall-backend": "[concat('10.', parameters('NetworkCIDROctet'), '.0.32/27')]",
-		"subnet1Name": "[parameters('GatewaySubnet')]",
-		"subnet2Name": "[parameters('firewall-frontend')]",
-		"subnet3Name": "[parameters('management')]",
-		"subnet4Name": "[parameters('firewall-backend')]",
+		"subnet1Name": "GatewaySubnet",
+		"subnet2Name": "firewall-frontend",
+		"subnet3Name": "management",
+		"subnet4Name": "firewall-backend",
 		"publicIPAddressName": "[concat(variables('virtualMachineName'),'-pip')]",
 		"subnet1Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet1Name'))]",
 		"subnet2Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet2Name'))]",
@@ -104,8 +104,8 @@
 	{
 		"type": "Microsoft.Resources/resourceGroups",
 		"apiVersion": "2021-04-01",
-		"name": "[parameters('rgName')]",
-		"location": "[parameters('rgLocation')]",
+		"name": "[variables('RGName')]",
+		"location": "[variables('location')]",
 		"properties": {}
 		},
 	{
@@ -159,7 +159,7 @@
 	},
 	{
 		"type": "Microsoft.Network/virtualNetworks",
-		"name": "[parameters('virtualNetworkName')]",
+		"name": "[variables('virtualNetworkName')]",
 		"apiVersion": "2017-06-01",
 		"location": "[variables('location')]",
 		"comments": "This will build a Virtual Network.",
@@ -209,7 +209,7 @@
 		"dependsOn": [
 			"[variables('publicIpAddressName')]",
 			"[variables('networkSecurityGroupName')]",
-			"[parameters('virtualNetworkName')]"
+			"[variables('virtualNetworkName')]"
 		],
 		"properties": {
 			"enableIPForwarding": true,
@@ -236,7 +236,7 @@
 		"location": "[variables('location')]",
 		"comments": "This will be your Secondary NIC",
 		"dependsOn": [
-			"[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
+			"[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
 		],
 		"properties": {
 			"enableIPForwarding": true,
