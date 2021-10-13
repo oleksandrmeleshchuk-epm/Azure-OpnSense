@@ -5,7 +5,7 @@
 [![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmain%2FOpnSense%2Fazuredeploy.json)
 [![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmain%2FOpnSense%2Fazuredeploy.json)
 
-**Existing VNET + OPNsense with two NICs (Untrusted/Trusted)**
+<!-- **Existing VNET + OPNsense with two NICs (Untrusted/Trusted)**
 
 [![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmain%2FOpnSense%2Fazuredeploy-TwoNICs.json)
 [![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmain%2FOpnSense%2Fazuredeploy-TwoNICs.json)
@@ -19,7 +19,7 @@
 
 [![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmain%2FOpnSense%2Fazuredeploy-SingleNIC.json)
 [![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmain%2FOpnSense%2Fazuredeploy-SingleNIC.json)
-
+-->
 
 Those template allows you to deploy an OPNsense Firewall VM using the opnsense-bootsrtap installation method. It creates an FreeBSD VM, does a silent install of OPNsense using a modified version of opnsense-bootstrap.sh with the settings provided.
 
