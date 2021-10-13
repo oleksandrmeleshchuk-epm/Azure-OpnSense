@@ -180,9 +180,9 @@
 		],
 		"properties": {
 			"addressSpace": {
-			"addressPrefixes": [
-				"[variables('subnetAddressSpace')]"
-			]
+				"addressPrefixes": [
+					"[variables('subnetAddressSpace')]"
+				]
 			},
 			"subnets": [
 				{
@@ -191,18 +191,18 @@
 						"addressPrefix": "[variables('subnetGatewaySubnet')]"
 					}
 				},
-			  {
+				{
 					"name": "[variables('subnet2Name')]",
 					"properties": {
 						"addressPrefix": "[variables('subnetfirewall-frontend')]"
 					}
-			  },
-			  {
+				},
+				{
 					"name": "[variables('subnet3Name')]",
 					"properties": {
 						"addressPrefix": "[variables('subnetmanagement')]"
 					}
-			  },
+				},
 				{
 					"name": "[variables('subnet4Name')]",
 					"properties": {
