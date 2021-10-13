@@ -58,7 +58,7 @@
     },
     "OpnScriptURI": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/Mincom/epm-nM-SIEM/master/SecOps/OpnSense/scripts/",
+      "defaultValue": "https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/",
             "metadata": {
       "description": "URI for Custom OPN Script and Config"
       }

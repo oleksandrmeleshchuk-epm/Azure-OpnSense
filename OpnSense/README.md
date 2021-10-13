@@ -1,24 +1,24 @@
-# OPNsense Firewall on FreeBSD VM
+	# OPNsense Firewall on FreeBSD VM
 
 **New VNET + OPNsense with two NICs (Untrusted/Trusted)**
 
-[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMincom%2Fepm-nM-SIEM%2Fmaster%2FSecOps%2FOpnSense%2Fazuredeploy.json)
-[![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FMincom%2Fepm-nM-SIEM%2Fmaster%2FSecOps%2FOpnSense%2Fazuredeploy.json)
+[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmaster%2FOpnSense%2Fazuredeploy.json)
+[![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmaster%2FOpnSense%2Fazuredeploy.json)
 
 **Existing VNET + OPNsense with two NICs (Untrusted/Trusted)**
 
-[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMincom%2Fepm-nM-SIEM%2Fmaster%2FSecOps%2FOpnSense%2Fazuredeploy-TwoNICs.json)
-[![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FMincom%2Fepm-nM-SIEM%2Fmaster%2FSecOps%2FOpnSense%2Fazuredeploy-TwoNICs.json)
+[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmaster%2FOpnSense%2Fazuredeploy-TwoNICs.json)
+[![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmaster%2FOpnSense%2Fazuredeploy-TwoNICs.json)
 
 **New VNET + OPNsense with single NIC**
 
-[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMincom%2Fepm-nM-SIEM%2Fmaster%2FSecOps%2FOpnSense%2Fazuredeploy-newvnet-single-nic.json)
-[![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FMincom%2Fepm-nM-SIEM%2Fmaster%2FSecOps%2FOpnSense%2Fazuredeploy-newvnet-single-nic.json)
+[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmaster%2FOpnSense%2Fazuredeploy-newvnet-single-nic.json)
+[![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmaster%2FOpnSense%2Fazuredeploy-newvnet-single-nic.json)
 
 **Existing VNET + OPNsense with single NIC**
 
-[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMincom%2Fepm-nM-SIEM%2Fmaster%2FSecOps%2FOpnSense%2Fazuredeploy-SingleNIC.json)
-[![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FMincom%2Fepm-nM-SIEM%2Fmaster%2FSecOps%2FOpnSense%2Fazuredeploy-SingleNIC.json)
+[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmaster%2FOpnSense%2Fazuredeploy-SingleNIC.json)
+[![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmaster%2FOpnSense%2Fazuredeploy-SingleNIC.json)
 
 
 Those template allows you to deploy an OPNsense Firewall VM using the opnsense-bootsrtap installation method. It creates an FreeBSD VM, does a silent install of OPNsense using a modified version of opnsense-bootstrap.sh with the settings provided.
@@ -71,4 +71,4 @@ Here are few considerations to deploy this solution correctly:
 
 ## Feedbacks
 
-Please use Github [issues tab](https://github.com/Mincom/epm-nM-SIEM/issues) to provide feedback.
+Please use Github [issues tab](https://github.com/oleksandrmeleshchuk-epm/Azure-OpnSense/issues) to provide feedback.
