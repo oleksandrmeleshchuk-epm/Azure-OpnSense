@@ -2,19 +2,6 @@
 	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
-		"rgName": {
-			"type": "string"
-			"metadata": {
-				"description": "VM size, please choose a size which allow 2 NICs."
-			}
-		},
-		"rgLocation": {
-			"type": "string"
-			"defaultValue": "northeurope",
-			"metadata": {
-				"description": "VM size, please choose a size which allow 2 NICs."
-			}
-		},
 		"virtualMachineSize": {
 			"type": "string",
 			"defaultValue": "Standard_D2s_v3",
@@ -91,8 +78,8 @@
 	},
 	"variables": {
 		"extensionName":"CustomScript",
-		"virtualNetworkName": "[concat(parameters('rgName'),'-vnet')]",
-		"virtualMachineName": "[concat(parameters('rgName'),'parameters('virtualMachineNumber')')]",
+		"virtualNetworkName": "[concat(resourceGroup(),'-vnet')]",
+		"virtualMachineName": "[concat(resourceGroup(),parameters('virtualMachineNumber'))]",
 		"nic1": "[concat(variables('virtualMachineName'),'-nic1')]",
 		"nic2": "[concat(variables('virtualMachineName'),'-nic2')]",
 		"subnetAddressSpace": "[concat('10.',parameters('NetworkCIDROctet'),'.0.0/16')]",
