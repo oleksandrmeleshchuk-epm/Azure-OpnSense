@@ -79,8 +79,8 @@
 	"variables": {
 		"extensionName":"CustomScript",
 		"RGName": "[toLower(resourceGroup().name)]",
-		"virtualNetworkName": "[concat(uniqueString(resourceGroup().name, '-vnet')]",
-		"virtualMachineName": "[concat(uniqueString(resourceGroup().name, parameters('virtualMachineNumber'))]",
+		"virtualNetworkName": "[concat(uniqueString(resourceGroup().name, '-vnet'))]",
+		"virtualMachineName": "[concat(uniqueString(resourceGroup().name, parameters('virtualMachineNumber')))]",
 		"nic1": "[concat(variables('virtualMachineName'), '-nic1')]",
 		"nic2": "[concat(variables('virtualMachineName'), '-nic2')]",
 		"subnetAddressSpace": "[concat('10.',parameters('NetworkCIDROctet'), '.0.0/16')]",
