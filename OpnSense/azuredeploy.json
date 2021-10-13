@@ -1,0 +1,397 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"rgName": {
+			"type": "string"
+			"metadata": {
+				"description": "VM size, please choose a size which allow 2 NICs."
+			}
+		},
+		"rgLocation": {
+			"type": "string"
+			"defaultValue": "northeurope",
+			"metadata": {
+				"description": "VM size, please choose a size which allow 2 NICs."
+			}
+		},
+		"virtualMachineSize": {
+			"type": "string",
+			"defaultValue": "Standard_D2s_v3",
+			"allowedValues": [
+				"Standard_D2s_v3",
+				"Standard_B2s"
+			],
+			"metadata": {
+				"description": "VM size, please choose a size which allow 2 NICs."
+			}
+		},
+		"virtualMachineNumber": {
+			"type": "string",
+			"defaultValue": "1",
+			"allowedValues": [
+				"1",
+				"2"
+			],
+			"metadata": {
+				"description": "OPN NVA Manchine Name"
+			}
+		},
+		"TempUsername": {
+			"type": "string",
+			"metadata": {
+				"description": "Default Temporary Admin username (Only used to deploy FreeBSD VM)"
+			}
+		},
+		"TempPassword": {
+			"type": "securestring",
+			"metadata": {
+				"description": "Default Temporary Admin password (Only used to deploy FreeBSD VM)"
+			}
+		},
+		"NetworkCIDROctet": {
+			"type": "string",
+			"defaultValue": "00",
+			"metadata": {
+				"description": "Network CIDR octet, check available address list from the corresponding documenation"
+			}
+		},
+		"PublicIPAddressSku": {
+			"type": "string",
+			"defaultValue": "Basic",
+			"allowedValues": [
+				"Basic",
+				"Standard"
+			],
+			"metadata": {
+				"description": "Specify Public IP SKU either Basic (lowest cost) or Standard (Required for HA LB)"
+			}
+		},
+		"OpnScriptURI": {
+			"type": "string",
+			"defaultValue": "https://raw.githubusercontent.com/Mincom/epm-nM-SIEM/master/SecOps/OpnSense/scripts/",
+			"metadata": {
+				"description": "URI for Custom OPN Script and Config"
+			}
+		},
+		"ShellScriptName": {
+			"type": "string",
+			"defaultValue": "configureopnsense.sh",
+			"metadata": {
+				"description": "Shell Script to be executed"
+			}
+		},
+		"OpnConfigFile": {
+			"type": "string",
+			"defaultValue": "config.xml",
+			"metadata": {
+				"description": "OPNSense XML Config File"
+			}
+		}
+	},
+	"variables": {
+		"extensionName":"CustomScript",
+		"virtualNetworkName": "[concat(parameters('rgName'),'-vnet')]",
+		"virtualMachineName": "[concat(parameters('rgName'),'parameters('virtualMachineNumber')')]",
+		"nic1": "[concat(variables('virtualMachineName'),'-nic1')]",
+		"nic2": "[concat(variables('virtualMachineName'),'-nic2')]",
+		"subnetAddressSpace": "[concat('10.',parameters('NetworkCIDROctet'),'.0.0/16')]",
+		"subnetGatewaySubnet": "[concat('10.',parameters('NetworkCIDROctet'),'.0.128/26')]",
+		"subnetfirewall-frontend": "[concat('10.',parameters('NetworkCIDROctet'),'.0.0/27')]",
+		"subnetmanagement": "[concat('10.',parameters('NetworkCIDROctet'),'.0.64/26')]",
+		"subnetfirewall-backend": "[concat('10.',parameters('NetworkCIDROctet'),'.0.32/27')]",
+		"subnet1Name": "[parameters('GatewaySubnet')]",
+		"subnet2Name": "[parameters('firewall-frontend')]",
+		"subnet3Name": "[parameters('management')]",
+		"subnet4Name": "[parameters('firewall-backend')]",
+		"publicIPAddressName": "[concat(variables('virtualMachineName'),'-pip')]",
+		"subnet1Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet1Name'))]",
+		"subnet2Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet2Name'))]",
+		"subnet3Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet3Name'))]",
+		"subnet4Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet4Name'))]",
+		"networkSecurityGroupName": "Only-RFC-1918",
+		"location": "[resourceGroup().location]"
+	},
+	"resources": [
+	{
+		"type": "Microsoft.Resources/resourceGroups",
+		"apiVersion": "2021-04-01",
+		"name": "[parameters('rgName')]",
+		"location": "[parameters('rgLocation')]",
+		"properties": {}
+		},
+	{
+		"name": "[variables('virtualMachineName')]",
+		"type": "Microsoft.Compute/virtualMachines",
+		"apiVersion": "2017-03-30",
+		"location": "[variables('location')]",
+		"comments": "This is the virtual machine that you're building.",
+		"dependsOn": [
+		"[variables('nic1')]",
+		"[variables('nic2')]"
+	],
+		"properties": {
+			"osProfile": {
+			  "computerName": "[variables('virtualMachineName')]",
+			  "adminUsername": "[parameters('TempUsername')]",
+			  "adminPassword": "[parameters('TempPassword')]"
+			},
+			"hardwareProfile": {
+			  "vmSize": "[parameters('virtualMachineSize')]"
+			},
+			"storageProfile": {
+			  "imageReference": {
+				"publisher": "MicrosoftOSTC",
+				"offer": "FreeBSD",
+				"sku": "12.0",
+				"version": "latest"
+			  },
+			  "osDisk": {
+				"createOption": "FromImage"
+			  },
+			  "dataDisks": []
+			},
+			"networkProfile": {
+			  "networkInterfaces": [
+				{
+				  "properties": {
+					"primary": true
+				  },
+				  "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic1'))]"
+				},
+				{
+				  "properties": {
+					"primary": false
+				  },
+				  "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic2'))]"
+				}
+			  ]
+			}
+		}
+	},
+	{
+		"type": "Microsoft.Network/virtualNetworks",
+		"name": "[parameters('virtualNetworkName')]",
+		"apiVersion": "2017-06-01",
+		"location": "[variables('location')]",
+		"comments": "This will build a Virtual Network.",
+		"dependsOn": [
+			"[variables('networkSecurityGroupName')]"
+		],
+		"properties": {
+			"addressSpace": {
+			"addressPrefixes": [
+				"[variables('subnetAddressSpace')]"
+			]
+			},
+			"subnets": [
+				{
+					"name": "[variables('subnet1Name')]",
+					"properties": {
+						"addressPrefix": "[variables('subnetGatewaySubnet')]"
+					}
+				},
+			  {
+					"name": "[variables('subnet2Name')]",
+					"properties": {
+						"addressPrefix": "[variables('subnetfirewall-frontend')]"
+					}
+			  },
+			  {
+					"name": "[variables('subnet3Name')]",
+					"properties": {
+						"addressPrefix": "[variables('subnetmanagement')]"
+					}
+			  },
+				{
+					"name": "[variables('subnet4Name')]",
+					"properties": {
+						"addressPrefix": "[variables('subnetfirewall-backend')]"
+					}
+				}
+			]
+		}
+	},
+	{
+		"name": "[variables('nic1')]",
+		"type": "Microsoft.Network/networkInterfaces",
+		"apiVersion": "2017-06-01",
+		"location": "[variables('location')]",
+		"comments": "This will be your Primary NIC",
+		"dependsOn": [
+			"[variables('publicIpAddressName')]",
+			"[variables('networkSecurityGroupName')]",
+			"[parameters('virtualNetworkName')]"
+		],
+		"properties": {
+			"enableIPForwarding": true,
+			"ipConfigurations": [
+			{
+				"name": "ipconfig1",
+				"properties": {	
+					"subnet": {
+						"id": "[variables('subnet2Name')]"
+					},
+					"privateIPAllocationMethod": "Dynamic",
+						"publicIpAddress": {
+							"id": "[resourceId('Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]"
+						}
+					}
+				}
+			]
+		}
+	},
+	{
+		"name": "[variables('nic2')]",
+		"type": "Microsoft.Network/networkInterfaces",
+		"apiVersion": "2017-06-01",
+		"location": "[variables('location')]",
+		"comments": "This will be your Secondary NIC",
+		"dependsOn": [
+			"[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
+		],
+		"properties": {
+			"enableIPForwarding": true,
+			"networkSecurityGroup": {
+				"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+			},
+			"ipConfigurations": [
+				{
+					"name": "ipconfig1",
+					"properties": {
+						"subnet": {
+							"id": "[variables('subnet4Ref')]"
+						},
+					"privateIPAllocationMethod": "Dynamic"
+					}
+				}
+			]
+		}
+	},
+	{
+		"name": "[variables('publicIpAddressName')]",
+		"type": "Microsoft.Network/publicIPAddresses",
+		"apiVersion": "2020-07-01",
+		"location": "[variables('location')]",
+		"comments": "Public IP for your WAN NIC",
+		"sku": {
+			"name": "[parameters('PublicIPAddressSku')]",
+			"tier": "Regional"
+		},
+		"properties": {
+			"publicIPAllocationMethod": "Static"
+		}
+	},
+	{
+	"name": "[variables('networkSecurityGroupName')]",
+	"type": "Microsoft.Network/networkSecurityGroups",
+	"apiVersion": "2016-09-01",
+	"location": "[variables('location')]",
+	"comments": "Network Security Group (NSG) for your Primary NIC",
+	"properties": {
+		"securityRules": [
+			{
+				"name": "Inbound-10",
+				"properties": {
+					  "priority": 100,
+					  "sourceAddressPrefix": "10.0.0.0/8",
+					  "protocol": "*",
+					  "destinationPortRange": "*",
+					  "access": "Allow",
+					  "direction": "Inbound",
+					  "sourcePortRange": "*",
+					  "destinationAddressPrefix": "*"
+				}
+			},
+			{
+				"name": "Inbound-172",
+				"properties": {
+					"priority": 110,
+					"sourceAddressPrefix": "172.16.0.0/12",
+					"protocol": "*",
+					"destinationPortRange": "*",
+					"access": "Allow",
+					"direction": "Inbound",
+					"sourcePortRange": "*",
+					"destinationAddressPrefix": "*"
+				}
+			},
+			{
+				"name": "Inbound-192",
+				"properties": {
+					"priority": 120,
+					"sourceAddressPrefix": "192.168.0.0/16",
+					"protocol": "*",
+					"destinationPortRange": "*",
+					"access": "Allow",
+					"direction": "Inbound",
+					"sourcePortRange": "*",
+					"destinationAddressPrefix": "*"
+				}
+			},
+			{
+				"name": "Outbound-10",
+				"properties": {
+					"priority": 100,
+					"sourceAddressPrefix": "*",
+					"protocol": "*",
+					"destinationPortRange": "*",
+					"access": "Allow",
+					"direction": "Outbound",
+					"sourcePortRange": "*",
+					"destinationAddressPrefix": "10.0.0.0/8"
+				}  
+			  },
+			  {
+					"name": "Outbound-172",
+					"properties": {
+						"priority": 110,
+						"sourceAddressPrefix": "*",
+						"protocol": "*",
+						"destinationPortRange": "*",
+						"access": "Allow",
+						"direction": "Outbound",
+						"sourcePortRange": "*",
+						"destinationAddressPrefix": "172.16.0.0/12"
+					}  
+			},
+			{
+				"name": "Outbound-192",
+				"properties": {
+					"priority": 120,
+					"sourceAddressPrefix": "*",
+					"protocol": "*",
+					"destinationPortRange": "*",
+					"access": "Allow",
+					"direction": "Outbound",
+					"sourcePortRange": "*",
+					"destinationAddressPrefix": "192.168.0.0/16"
+				}  
+			}
+		]
+	}
+	},
+	{
+	"type": "Microsoft.Compute/virtualMachines/extensions",
+	"name": "[concat(variables('virtualMachineName'), '/', variables('extensionName'))]",
+	"apiVersion": "2015-06-15",
+	"location": "[variables('location')]",
+	"dependsOn": [
+	"[concat('Microsoft.Compute/virtualMachines/', variables('virtualMachineName'))]"
+	],
+	"properties": {
+	"publisher": "Microsoft.OSTCExtensions",
+	"type": "CustomScriptForLinux",
+	"typeHandlerVersion": "1.4",
+	"autoUpgradeMinorVersion": false,
+	"settings": {
+	  "fileUris": [
+		"[concat(parameters('OPNScriptURI'),parameters('ShellScriptName'))]" 
+	  ],
+	  "commandToExecute": "[concat('sh ',parameters('ShellScriptName'),' ',parameters('OPNConfigFile'))]"
+	}             
+	}
+	}
+	],
+  "outputs": {}
+}
