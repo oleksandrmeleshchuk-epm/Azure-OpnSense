@@ -58,6 +58,13 @@
 				"description": "OPNSense XML Config File"
 			}
 		},
+		"GitOrg": {
+			"type": "string",
+			"defaultValue": "",
+			"metadata": {
+				"description": "GitHub repo org"
+			}
+		},
 		"BackupRepo": {
 			"type": "string",
 			"defaultValue": "",
@@ -211,7 +218,7 @@
 					"fileUris": [
 						"[concat(parameters('OPNScriptURI'),parameters('ShellScriptName'))]" 
 					],
-					"commandToExecute": "[concat('sh ',parameters('ShellScriptName'),' ',parameters('OPNConfigFile'),' ',variables('RGName'),' ',parameters('BackupRepo'),' ',parameters('PAT'))]"
+					"commandToExecute": "[concat('sh ',parameters('ShellScriptName'),' ',parameters('OPNConfigFile'),' ',variables('RGName'),' ',parameters('BackupRepo'),' ',variables('GitOrg'),' ',parameters('PAT'))]"
 				}             
 			}
 		}

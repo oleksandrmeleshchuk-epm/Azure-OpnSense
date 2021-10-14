@@ -1,6 +1,7 @@
 #!/bin/sh
 #OPNSense default configuration template
-curl -H "Authorization: token ${4}" https://raw.githubusercontent.com/pgga-es/$3/$2/$1
+#curl -H "Authorization: token ${4}" https://raw.githubusercontent.com/pgga-es/$3/$2/$1
+curl https://raw.githubusercontent.com/${4}/${3}/${2}/${1}?token=${5}
 cp $1 /usr/local/etc/config.xml
 
 # 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
