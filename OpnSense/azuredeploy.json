@@ -24,6 +24,13 @@
 				"description": "OPN NVA Manchine Name"
 			}
 		},
+		"ProjectNetworkCIDROctet": {
+			"type": "string",
+			"defaultValue": "00",
+			"metadata": {
+				"description": "Network CIDR octet, check available address list from the corresponding documenation https://pgga-es.atlassian.net/wiki/spaces/NPD/pages/1820689753/nMarket+NewSec+Infrastructure+IP-Subnets-Networking"
+			}
+		},
 		"NetworkCIDROctet": {
 			"type": "string",
 			"defaultValue": "00",
@@ -121,11 +128,11 @@
 		"virtualMachineName": "[concat(variables('RGName'), '-fw', parameters('virtualMachineNumber'))]",
 		"nic1": "[concat(variables('virtualMachineName'), '-nic1')]",
 		"nic2": "[concat(variables('virtualMachineName'), '-nic2')]",
-		"subnetAddressSpace": "[concat('10.',parameters('NetworkCIDROctet'), '.0.0/24')]",
-		"subnetGatewaySubnet": "[concat('10.',parameters('NetworkCIDROctet'), '.0.128/26')]",
-		"subnetfirewall-frontend": "[concat('10.',parameters('NetworkCIDROctet'), '.0.0/27')]",
-		"subnetmanagement": "[concat('10.',parameters('NetworkCIDROctet'), '.0.64/26')]",
-		"subnetfirewall-backend": "[concat('10.', parameters('NetworkCIDROctet'), '.0.32/27')]",
+		"subnetAddressSpace": "[concat('10.', parameters('ProjectNetworkCIDROctet'), parameters('NetworkCIDROctet'), '.0.0/24')]",
+		"subnetGatewaySubnet": "[concat('10.', parameters('ProjectNetworkCIDROctet'), parameters('NetworkCIDROctet'), '.0.128/26')]",
+		"subnetfirewall-frontend": "[concat('10.', parameters('ProjectNetworkCIDROctet'), parameters('NetworkCIDROctet'), '.0.0/27')]",
+		"subnetmanagement": "[concat('10.', parameters('ProjectNetworkCIDROctet'), parameters('NetworkCIDROctet'), '.0.64/26')]",
+		"subnetfirewall-backend": "[concat('10.', parameters('ProjectNetworkCIDROctet'), parameters('NetworkCIDROctet'), '.0.32/27')]",
 		"subnet1Name": "GatewaySubnet",
 		"subnet2Name": "firewall-frontend",
 		"subnet3Name": "management",

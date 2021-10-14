@@ -37,18 +37,6 @@
 				"description": "OPN NVA Manchine number which got broken"
 			}
 		},
-		"TempUsername": {
-			"type": "string",
-			"metadata": {
-				"description": "Default Temporary Admin username (Only used to deploy FreeBSD VM)"
-			}
-		},
-		"TempPassword": {
-			"type": "securestring",
-			"metadata": {
-				"description": "Default Temporary Admin password (Only used to deploy FreeBSD VM)"
-			}
-		},
 		"OpnScriptURI": {
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/",
@@ -86,12 +74,15 @@
 		}
 	},
 	"variables": {
+		"TempUsername": "devops",
+		"TempPassword": "[concat('P', uniqueString(subscription().subscriptionId), '!')]",
 		"extensionName":"CustomScript",
 		"RGName": "[toLower(resourceGroup().name)]",
 		"virtualNetworkName": "[concat(variables('RGName'), '-vnet')]",
-		"virtualMachineName": "[concat(variables('RGName'), '-fw', parameters('virtualMachineNumber'))]",
+		"virtualMachineName": "[concat(variables('RGName'), '-fw', parameters('NewVirtualMachineNumber'))]",
 		"OldVirtualMachineName": "[concat(variables('RGName'), '-fw', parameters('OldVirtualMachineNumber'))]",
-		"nic1": "[concat(variables('OldVirtualMachineName') , '-nic1')]",
+		"publicIPAddressName": "[concat(variables('virtualMachineName'),'-pip')]",
+		"nic1": "[concat(variables('OldVirtualMachineName'), '-nic1')]",
 		"nic2": "[concat(variables('OldVirtualMachineName'), '-nic2')]",
 		"subnet1Name": "GatewaySubnet",
 		"subnet2Name": "firewall-frontend",
@@ -118,8 +109,8 @@
 			"properties": {
 				"osProfile": {
 					"computerName": "[variables('virtualMachineName')]",
-					"adminUsername": "[parameters('TempUsername')]",
-					"adminPassword": "[parameters('TempPassword')]"
+					"adminUsername": "[variables('TempUsername')]",
+					"adminPassword": "[variables('TempPassword')]"
 				},
 				"hardwareProfile": {
 					"vmSize": "[parameters('virtualMachineSize')]"
@@ -132,7 +123,8 @@
 						"version": "latest"
 					},
 					"osDisk": {
-						"createOption": "FromImage"
+						"createOption": "FromImage",
+						"name": "[concat(variables('virtualMachineName'), '-disk')]"
 					},
 					"dataDisks": []
 				},
@@ -152,6 +144,54 @@
 						}
 					]
 				}
+			}
+		},
+		{
+			"name": "[variables('nic1')]",
+			"type": "Microsoft.Network/networkInterfaces",
+			"apiVersion": "2017-06-01",
+			"location": "[variables('location')]",
+			"comments": "This will be your Primary NIC",
+			"properties": {
+				"enableIPForwarding": true,
+				"ipConfigurations": [
+					{
+						"name": "ipconfig1",
+						"properties": {	
+							"subnet": {
+								"id": "[variables('subnet2Ref')]"
+							},
+							"privateIPAllocationMethod": "Dynamic",
+							"publicIpAddress": {
+								"id": "[resourceId('Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]"
+							}
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "[variables('nic2')]",
+			"type": "Microsoft.Network/networkInterfaces",
+			"apiVersion": "2017-06-01",
+			"location": "[variables('location')]",
+			"comments": "This will be your Secondary NIC",
+			"properties": {
+				"enableIPForwarding": true,
+				"networkSecurityGroup": {
+					"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+				},
+				"ipConfigurations": [
+					{
+						"name": "ipconfig1",
+						"properties": {
+							"subnet": {
+								"id": "[variables('subnet4Ref')]"
+							},
+						"privateIPAllocationMethod": "Dynamic"
+						}
+					}
+				]
 			}
 		},
 		{
