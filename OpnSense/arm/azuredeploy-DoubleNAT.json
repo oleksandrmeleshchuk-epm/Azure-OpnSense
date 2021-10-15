@@ -270,6 +270,9 @@
 			"apiVersion": "2017-06-01",
 			"location": "[variables('location')]",
 			"comments": "This will build a Virtual Network.",
+			"dependsOn": [
+				"[concat('Microsoft.Network/routeTables/', variables('routeTableName'))]"
+			],
 			"properties": {
 				"addressSpace": {
 					"addressPrefixes": [
