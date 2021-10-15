@@ -216,14 +216,14 @@
 						"name": "ToVPN",
 						"properties": {
 							"addressPrefix": "[concat('172.16.', parameters('NetworkCIDROctet'), '0/24')]", 
-							"nextHopType": "Virtual network gateway"
+							"nextHopType": "VirtualNetworkGateway"
 						}
 					},
 					{
 						"name": "VNETLocal",
 						"properties": {
 							"addressPrefix": "[variables('subnetAddressSpace')]",
-							"nextHopType": "Virtual network"
+							"nextHopType": "VnetLocal"
 						}
 					}
 				]
