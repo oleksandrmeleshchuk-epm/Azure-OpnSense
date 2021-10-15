@@ -100,16 +100,9 @@
 		},
 		"ShellScriptName": {
 			"type": "string",
-			"defaultValue": "configureopnsense.sh",
+			"defaultValue": "configureopnsense-bySecOps.sh",
 			"metadata": {
 				"description": "Shell Script to be executed"
-			}
-		},
-		"OpnConfigFile": {
-			"type": "string",
-			"defaultValue": "config.xml",
-			"metadata": {
-				"description": "OPNSense XML Config File"
 			}
 		}
 	},
@@ -183,13 +176,13 @@
 					"networkInterfaces": [
 						{
 							"properties": {
-								"primary": true
+								"primary": false
 							},
 							"id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic1'))]"
 						},
 						{
 							"properties": {
-								"primary": false
+								"primary": true
 							},
 							"id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic2'))]"
 						}
@@ -209,7 +202,7 @@
 						"properties": {
 							"addressPrefix": "0.0.0.0/0",
 							"nextHopType": "VirtualAppliance", 
-							"nextHopIpAddress": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.36')]"
+							"nextHopIpAddress": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.39')]"
 						}
 					},
 					{
@@ -340,9 +333,10 @@
 						"name": "ipconfig1",
 						"properties": {	
 							"subnet": {
-								"id": "[variables('subnet2Ref')]"
+								"id": "[variables('subnet4Ref')]"
 							},
-							"privateIPAllocationMethod": "Dynamic",
+							"privateIPAddress": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.39')]",
+							"privateIPAllocationMethod": "Static",
 							"publicIpAddress": {
 								"id": "[resourceId('Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]"
 							}
@@ -367,9 +361,13 @@
 						"name": "ipconfig1",
 						"properties": {
 							"subnet": {
-								"id": "[variables('subnet4Ref')]"
+								"id": "[variables('subnet2Ref')]"
 							},
-						"privateIPAllocationMethod": "Dynamic"
+							"privateIPAddress": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.7')]",
+							"privateIPAllocationMethod": "Static",
+							"publicIpAddress": {
+								"id": "[resourceId('Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]"
+							}
 						}
 					}
 				]
@@ -495,7 +493,7 @@
 					"fileUris": [
 						"[concat(parameters('OPNScriptURI'),parameters('ShellScriptName'))]" 
 					],
-					"commandToExecute": "[concat('sh ',parameters('ShellScriptName'),' ',parameters('OPNConfigFile'))]"
+					"commandToExecute": "[concat('sh ',parameters('ShellScriptName'),' ',parameters('ProjectNetworkCIDROctet'),' ',parameters('NetworkCIDROctet'))]"
 				}             
 			}
 		}

@@ -1,0 +1,240 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"virtualMachineSize": {
+			"type": "string",
+			"defaultValue": "Standard_D2s_v3",
+			"allowedValues": [
+				"Standard_D2s_v3",
+				"Standard_B2s"
+			],
+			"metadata": {
+				"description": "VM size, please choose a size which allow 2 NICs."
+			}
+		},
+		"NewVirtualMachineNumber": {
+			"type": "string",
+			"defaultValue": "1",
+			"allowedValues": [
+				"1",
+				"2",
+				"3",
+				"4"
+			],
+			"metadata": {
+				"description": "OPN NVA Manchine Name"
+			}
+		},
+		"OldVirtualMachineNumber": {
+			"type": "string",
+			"defaultValue": "1",
+			"allowedValues": [
+				"1",
+				"2"
+			],
+			"metadata": {
+				"description": "OPN NVA Manchine number which got broken"
+			}
+		},
+		"ProjectNetworkCIDROctet": {
+			"type": "string",
+			"defaultValue": "00",
+			"metadata": {
+				"description": "Network CIDR octet, check available address list from the corresponding documenation https://pgga-es.atlassian.net/wiki/spaces/NPD/pages/1820689753/nMarket+NewSec+Infrastructure+IP-Subnets-Networking"
+			}
+		},
+		"NetworkCIDROctet": {
+			"type": "string",
+			"defaultValue": "00",
+			"metadata": {
+				"description": "Network CIDR octet, check available address list from the corresponding documenation https://pgga-es.atlassian.net/wiki/spaces/NPD/pages/1820689753/nMarket+NewSec+Infrastructure+IP-Subnets-Networking"
+			}
+		},
+		"OpnScriptURI": {
+			"type": "string",
+			"defaultValue": "https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/",
+				"metadata": {
+			"description": "URI for Custom OPN Script and Config"
+			}
+		},
+		"ShellScriptName": {
+			"type": "string",
+			"defaultValue": "recoveropnsense.sh",
+			"metadata": {
+				"description": "Shell Script to be executed"
+			}
+		},
+		"OpnConfigFile": {
+			"type": "string",
+			"defaultValue": "config.xml",
+			"metadata": {
+				"description": "OPNSense XML Config File"
+			}
+		},
+		"GitOrg": {
+			"type": "string",
+			"defaultValue": "",
+			"metadata": {
+				"description": "GitHub repo org"
+			}
+		},
+		"BackupRepo": {
+			"type": "string",
+			"defaultValue": "",
+			"metadata": {
+				"description": "OPNSense XML Config backup File Repo"
+			}
+		},
+		"PAT": {
+			"type": "securestring",
+			"defaultValue": "",
+			"metadata": {
+				"description": "Personal Access Token to the Github repo"
+			}
+		}
+	},
+	"variables": {
+		"TempUsername": "devops",
+		"TempPassword": "[concat('P', uniqueString(subscription().subscriptionId), '!')]",
+		"extensionName":"CustomScript",
+		"RGName": "[toLower(resourceGroup().name)]",
+		"virtualNetworkName": "[concat(variables('RGName'), '-vnet')]",
+		"virtualMachineName": "[concat(variables('RGName'), '-fw', parameters('NewVirtualMachineNumber'))]",
+		"OldVirtualMachineName": "[concat(variables('RGName'), '-fw', parameters('OldVirtualMachineNumber'))]",
+		"publicIPAddressName": "[concat(variables('virtualMachineName'),'-pip')]",
+		"nic1": "[concat(variables('OldVirtualMachineName'), '-nic1')]",
+		"nic2": "[concat(variables('OldVirtualMachineName'), '-nic2')]",
+		"subnet1Name": "GatewaySubnet",
+		"subnet2Name": "firewall-frontend",
+		"subnet3Name": "management",
+		"subnet4Name": "firewall-backend",
+		"subnet1Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet1Name'))]",
+		"subnet2Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet2Name'))]",
+		"subnet3Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet3Name'))]",
+		"subnet4Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet4Name'))]",
+		"networkSecurityGroupName": "Only-RFC-1918",
+		"location": "[resourceGroup().location]"
+	},
+	"resources": [
+		{
+			"name": "[variables('virtualMachineName')]",
+			"type": "Microsoft.Compute/virtualMachines",
+			"apiVersion": "2017-03-30",
+			"location": "[variables('location')]",
+			"comments": "This is the virtual machine that you're building.",
+			"dependsOn": [
+				"[variables('nic1')]",
+				"[variables('nic2')]"
+			],
+			"properties": {
+				"osProfile": {
+					"computerName": "[variables('virtualMachineName')]",
+					"adminUsername": "[variables('TempUsername')]",
+					"adminPassword": "[variables('TempPassword')]"
+				},
+				"hardwareProfile": {
+					"vmSize": "[parameters('virtualMachineSize')]"
+				},
+				"storageProfile": {
+					"imageReference": {
+						"publisher": "MicrosoftOSTC",
+						"offer": "FreeBSD",
+						"sku": "12.0",
+						"version": "latest"
+					},
+					"osDisk": {
+						"createOption": "FromImage",
+						"name": "[concat(variables('virtualMachineName'), '-disk')]"
+					},
+					"dataDisks": []
+				},
+				"networkProfile": {
+					"networkInterfaces": [
+						{
+							"properties": {
+								"primary": false
+							},
+							"id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic1'))]"
+						},
+						{
+							"properties": {
+								"primary": true
+							},
+							"id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic2'))]"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "[variables('nic1')]",
+			"type": "Microsoft.Network/networkInterfaces",
+			"apiVersion": "2017-06-01",
+			"location": "[variables('location')]",
+			"comments": "This will be your Primary NIC",
+			"properties": {
+				"enableIPForwarding": true,
+				"ipConfigurations": [
+					{
+						"name": "ipconfig1",
+						"properties": {	
+							"subnet": {
+								"id": "[variables('subnet4Ref')]"
+							},
+							"privateIPAddress": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.39')]",
+							"privateIPAllocationMethod": "Static"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "[variables('nic2')]",
+			"type": "Microsoft.Network/networkInterfaces",
+			"apiVersion": "2017-06-01",
+			"location": "[variables('location')]",
+			"comments": "This will be your Secondary NIC",
+			"properties": {
+				"enableIPForwarding": true,
+				"ipConfigurations": [
+					{
+						"name": "ipconfig1",
+						"properties": {
+							"subnet": {
+								"id": "[variables('subnet2Ref')]"
+							},
+							"privateIPAddress": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.7')]",
+							"privateIPAllocationMethod": "Static",
+							"publicIpAddress": {
+								"id": "[resourceId('Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]"
+							}
+						}
+					}
+				]
+			}
+		},
+		{
+			"type": "Microsoft.Compute/virtualMachines/extensions",
+			"name": "[concat(variables('virtualMachineName'), '/', variables('extensionName'))]",
+			"apiVersion": "2015-06-15",
+			"location": "[variables('location')]",
+			"dependsOn": [
+				"[concat('Microsoft.Compute/virtualMachines/', variables('virtualMachineName'))]"
+			],
+			"properties": {
+				"publisher": "Microsoft.OSTCExtensions",
+				"type": "CustomScriptForLinux",
+				"typeHandlerVersion": "1.4",
+				"autoUpgradeMinorVersion": false,
+				"settings": {
+					"fileUris": [
+						"[concat(parameters('OPNScriptURI'),parameters('ShellScriptName'))]" 
+					],
+					"commandToExecute": "[concat('sh ',parameters('ShellScriptName'),' ',parameters('OPNConfigFile'),' ',variables('RGName'),' ',parameters('BackupRepo'),' ',parameters('GitOrg'),' ',parameters('PAT'))]"
+				}             
+			}
+		}
+	],
+  "outputs": {}
+}
