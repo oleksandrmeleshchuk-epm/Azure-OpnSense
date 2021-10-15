@@ -1,11 +1,11 @@
 	# OPNsense Firewall on FreeBSD VM
 
-**New VNET + OPNsense with two NICs (Untrusted/Trusted)**
+** New VNET + OPNsense with two NICs **
 
 [![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmain%2FOpnSense%2Fazuredeploy.json)
 [![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmain%2FOpnSense%2Fazuredeploy.json)
 
-**Existing VNET + OPNsense with two NICs (Untrusted/Trusted)**
+** Existing VNET + OPNsense with two NICs (DR) **
 
 [![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmain%2FOpnSense%2Fazuredeploy-Recovery.json)
 [![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmain%2FOpnSense%2Fazuredeploy-Recovery.json)
@@ -26,11 +26,10 @@ Those template allows you to deploy an OPNsense Firewall VM using the opnsense-b
 The login credentials are set during the installation process to:
 
 - Username: root
-- Password: opnsense (lowercase)
+- Password: 
 
-*** **Please** *** Change *default password!!!*
 
-After deployment, you can go to <https://PublicIP>, then input the user and password, to configure the OPNsense firewall.
+After deployment, you can go to <https://PublicIP:8076>, then input the user and password, to configure the OPNsense firewall.
 
 
 ## Overview
@@ -39,10 +38,10 @@ This OPNsense solution is installed in FreeBSD 12.2 (Azure Image).
 Here is what you will see when you deploy this Template:
 
 1) VNET with 4 Subnets and OPNsense VM with two NICs.
-2) VNET Address space is: 10.xx.0.0/16 (suggested Address space, you may change that).
-3) External NIC named Untrusted Linked to Untrusted-Subnet (10.0.0.0/24).
-4) Internal NIC named Trusted Linked to Trusted-Subnet (10.0.1.0/24).
-5) It creates a NSG named OPN-NSG which allows incoming SSH and HTTPS. Same NSG is associated to both Subnets.
+2) VNET Address space is: 10.xx.xx.0/16 (accordingly to the project subnet CIDR).
+3) External NIC named nic1 Linked to firewall-frontend (10.xx.xx.0/27).
+4) Internal NIC named nic2 Linked to firewall-backend (10.xx.xx.32/27).
+5) It creates a NSG named Only-RFC-1918 which allows incoming and outgoing traffic to/from the 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16. Same NSG is associated to the firewall-backend and management subnets.
 
 ## Design
 
@@ -56,16 +55,15 @@ Here are few considerations to deploy this solution correctly:
 
 - When you deploy this template, it will leave only TCP 22 listening to Internet while OPNsense gets installed.
 - To monitor the installation process during template deployment you can just probe the port 22 on OPNsense VM public IP (psping or tcping).
-- When port is down which means OPNsense is installed and VM will get restarted automatically. At this point you will have only TCP 443.
+- When port is down which means OPNsense is installed and VM will get restarted automatically. At this point you will have only TCP 8076.
 
 **Note**: It takes about 10 min to complete the whole process when VM is created and a new VM CustomScript is started to install OPNsense.
 
 ## Usage
 
-- First access can be done using <HTTPS://PublicIP.> Please ignore SSL/TLS errors and proceed.
-- Your first login is going to be username "root" and password "opnsense" (**PLEASE change your password right the way**).
-- To access SSH you can either deploy a Jumpbox VM on Trusted Subnet or create a Firewall Rule to allow SSH to Internet.
-- To send traffic to OPNsense you need to create UDR 0.0.0.0 and set IP of trusted NIC IP (10.0.1.4) as next hop. Associate that NVA to Trusted-Subnet.
+- First access can be done using <HTTPS://PublicIP:8076.> Please ignore SSL/TLS errors and proceed.
+- Your first login is going to be username "root" and password.
+
 - **Note:** It is necessary to create appropriate Firewall rules inside OPNsense to desired traffic to work properly.
 
 

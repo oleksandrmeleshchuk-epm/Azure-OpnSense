@@ -185,9 +185,6 @@
 			"comments": "This will be your Secondary NIC",
 			"properties": {
 				"enableIPForwarding": true,
-				"networkSecurityGroup": {
-					"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
-				},
 				"ipConfigurations": [
 					{
 						"name": "ipconfig1",

@@ -143,6 +143,7 @@
 		"subnet3Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet3Name'))]",
 		"subnet4Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet4Name'))]",
 		"networkSecurityGroupName": "Only-RFC-1918",
+		"routeTableName": "Global-General" ,
 		"location": "[resourceGroup().location]"
 	},
 	"resources": [
@@ -197,13 +198,46 @@
 			}
 		},
 		{
+			"type": "Microsoft.Network/routeTables",
+			"name": "[variables('routeTableName')]",
+			"apiVersion": "2015-06-15",
+			"location": "[variables('location')]",
+			"properties": {
+				"routes": [
+					{
+						"name": "ToInternet",
+						"properties": {
+							"addressPrefix": "0.0.0.0/0",
+							"nextHopType": "VirtualAppliance", 
+							"nextHopIpAddress": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.36')]"
+						}
+					},
+					{
+						"name": "ToVPN",
+						"properties": {
+							"addressPrefix": "[concat('172.16.', parameters('NetworkCIDROctet'), '0/24')]", 
+							"nextHopType": "Virtual network gateway"
+						}
+					},
+					{
+						"name": "VNETLocal",
+						"properties": {
+							"addressPrefix": "[variables('subnetAddressSpace')]",
+							"nextHopType": "Virtual network"
+						}
+					}
+				]
+			}
+		},
+		{
 			"type": "Microsoft.Network/virtualNetworks",
 			"name": "[variables('virtualNetworkName')]",
 			"apiVersion": "2017-06-01",
 			"location": "[variables('location')]",
 			"comments": "This will build a Virtual Network.",
 			"dependsOn": [
-				"[variables('networkSecurityGroupName')]"
+				"[concat('Microsoft.Network/routeTables/', variables('routeTableName'))]",
+				"[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
 			],
 			"properties": {
 				"addressSpace": {
@@ -227,13 +261,25 @@
 					{
 						"name": "[variables('subnet3Name')]",
 						"properties": {
-							"addressPrefix": "[variables('subnetmanagement')]"
+							"addressPrefix": "[variables('subnetmanagement')]",
+							"networkSecurityGroup": {
+								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+							},
+							"routeTable": {
+								"id": "[resourceId('Microsoft.Network/routeTables', variables('routeTableName'))]"
+							}
 						}
 					},
 					{
 						"name": "[variables('subnet4Name')]",
 						"properties": {
-							"addressPrefix": "[variables('subnetfirewall-backend')]"
+							"addressPrefix": "[variables('subnetfirewall-backend')]",
+							"networkSecurityGroup": {
+								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+							},
+							"routeTable": {
+								"id": "[resourceId('Microsoft.Network/routeTables', variables('routeTableName'))]"
+							}
 						}
 					}
 				]
@@ -285,7 +331,6 @@
 			"comments": "This will be your Primary NIC",
 			"dependsOn": [
 				"[variables('publicIpAddressName')]",
-				"[variables('networkSecurityGroupName')]",
 				"[variables('virtualNetworkName')]"
 			],
 			"properties": {
@@ -317,9 +362,6 @@
 			],
 			"properties": {
 				"enableIPForwarding": true,
-				"networkSecurityGroup": {
-					"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
-				},
 				"ipConfigurations": [
 					{
 						"name": "ipconfig1",
