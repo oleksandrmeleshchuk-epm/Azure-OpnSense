@@ -336,10 +336,7 @@
 								"id": "[variables('subnet4Ref')]"
 							},
 							"privateIPAddress": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.39')]",
-							"privateIPAllocationMethod": "Static",
-							"publicIpAddress": {
-								"id": "[resourceId('Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]"
-							}
+							"privateIPAllocationMethod": "Static"
 						}
 					}
 				]
