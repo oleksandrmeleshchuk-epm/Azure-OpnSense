@@ -426,13 +426,13 @@
 					"networkInterfaces": [
 						{
 							"properties": {
-								"primary": false
+								"primary": true
 							},
 							"id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic1'))]"
 						},
 						{
 							"properties": {
-								"primary": true
+								"primary": false
 							},
 							"id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic2'))]"
 						}
@@ -441,33 +441,12 @@
 			}
 		},
 		{
-			"type": "Microsoft.Compute/virtualMachines/extensions",
-			"name": "[concat(variables('virtualMachineName'), '/', variables('extensionName'))]",
-			"apiVersion": "2015-06-15",
-			"location": "[variables('location')]",
-			"dependsOn": [
-				"[concat('Microsoft.Compute/virtualMachines/', variables('virtualMachineName'))]"
-			],
-			"properties": {
-				"publisher": "Microsoft.OSTCExtensions",
-				"type": "CustomScriptForLinux",
-				"typeHandlerVersion": "1.4",
-				"autoUpgradeMinorVersion": false,
-				"settings": {
-					"fileUris": [
-						"[concat(parameters('OPNScriptURI'),parameters('ShellScriptName'))]" 
-					],
-					"commandToExecute": "[concat('sh ',parameters('ShellScriptName'),' ',parameters('ProjectNetworkCIDROctet'),' ',parameters('NetworkCIDROctet'))]"
-				}             
-			}
-		},
-		{
 			"type": "Microsoft.Network/routeTables",
 			"name": "[variables('routeTableName')]",
 			"apiVersion": "2015-06-15",
 			"location": "[variables('location')]",
 			"dependsOn": [
-				"[concat('Microsoft.Compute/virtualMachines/', variables('virtualMachineName'), '/extensions/', variables('extensionName'))]"
+				"[concat('Microsoft.Compute/virtualMachines/', variables('virtualMachineName'))]"
 			],
 			"properties": {
 				"routes": [
@@ -494,6 +473,27 @@
 						}
 					}
 				]
+			}
+		}
+		{
+			"type": "Microsoft.Compute/virtualMachines/extensions",
+			"name": "[concat(variables('virtualMachineName'), '/', variables('extensionName'))]",
+			"apiVersion": "2015-06-15",
+			"location": "[variables('location')]",
+			"dependsOn": [
+				"[concat('Microsoft.Network/routeTables/', variables('routeTableName'))]"
+			],
+			"properties": {
+				"publisher": "Microsoft.OSTCExtensions",
+				"type": "CustomScriptForLinux",
+				"typeHandlerVersion": "1.4",
+				"autoUpgradeMinorVersion": false,
+				"settings": {
+					"fileUris": [
+						"[concat(parameters('OPNScriptURI'),parameters('ShellScriptName'))]" 
+					],
+					"commandToExecute": "[concat('sh ',parameters('ShellScriptName'),' ',parameters('ProjectNetworkCIDROctet'),' ',parameters('NetworkCIDROctet'))]"
+				}             
 			}
 		}
 	],

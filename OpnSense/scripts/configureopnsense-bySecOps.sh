@@ -29,7 +29,7 @@ sed -i '' -E -e 's/21.21.21.21/'24'/g' config-bySecOps.xml
 sed -i '' -E -e 's|22.22.22.22|'$FWPW'|g' config-bySecOps.xml
 sed -i '' -E -e 's|23.23.23.23|'$OXIPW'|g' config-bySecOps.xml
 
-cp config-bySecOps.xml /usr/local/etc/config-bySecOps.xml
+cp config-bySecOps.xml /usr/local/etc/config.xml
 
 # 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
 # 2. Install bash to support Azure Backup integration
