@@ -1,17 +1,35 @@
 #!/bin/sh
 #OPNSense default configuration template
 fetch https://raw.githubusercontent.com/wjwidener/update/master/bootstrap/pw.php
-#fetch https://raw.githubusercontent.com/wjwidener/update/master/bootstrap/config.xml
-fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/config-bySecOps.xml
-fetch https://raw.githubusercontent.com/wjwidener/update/master/bootstrap/config.xml
-fetch https://raw.githubusercontent.com/wjwidener/update/master/bootstrap/updateips.sh
-fetch https://raw.githubusercontent.com/wjwidener/update/master/bootstrap/updateips2.sh
-fetch https://raw.githubusercontent.com/wjwidener/update/master/bootstrap/updateips3.sh
+fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/config-bySecOps.xml
 
-sh ./updateips.sh 10.${1}.${2}.7 27 10.${1}.${2}.39 27 10.${1}.${2}.33 10.${1}.${2}.1 10.${1}.${2}.32 27 
-sh ./updateips2.sh 10.${1}.${2}.64 26 10.${1}.${2}.9 10.${1}.${2}.11 172.31.${1}.0 24 10.${1}.${2}.0 24
-sh ./updateips3.sh 10.${1}.${2}.128 26 172.17.${1}.0 24 4Y4qphauPflcarg610Bt jJVoAWEbgeeAqT9flN29
-cp config.xml /usr/local/etc/config.xml
+sed -i '' -E -e 's/1.1.1.1/'10.${1}.${2}.7'/g' config-bySecOps.xml
+sed -i '' -E -e 's/2.2.2.2/'27'/g' config-bySecOps.xml
+sed -i '' -E -e 's/3.3.3.3/'10.${1}.${2}.39'/g' config-bySecOps.xml
+sed -i '' -E -e 's/4.4.4.4/'27'/g' config-bySecOps.xml
+sed -i '' -E -e 's/5.5.5.5/'10.${1}.${2}.33'/g' config-bySecOps.xml
+sed -i '' -E -e 's/6.6.6.6/'10.${1}.${2}.1'/g' config-bySecOps.xml
+sed -i '' -E -e 's/7.7.7.7/'10.${1}.${2}.32'/g' config-bySecOps.xml
+sed -i '' -E -e 's/9.9.9.9/'27'/g' config-bySecOps.xml
+sed -i '' -E -e 's/10.10.10.10/'10.${1}.${2}.64'/g' config-bySecOps.xml
+sed -i '' -E -e 's/11.11.11.11/'26'/g' config-bySecOps.xml
+sed -i '' -E -e 's/12.12.12.12/'10.${1}.${2}.9'/g' config-bySecOps.xml
+sed -i '' -E -e 's/13.13.13.13/'10.${1}.${2}.11'/g' config-bySecOps.xml
+sed -i '' -E -e 's/14.14.14.14/'172.31.${1}.0'/g' config-bySecOps.xml
+sed -i '' -E -e 's/15.15.15.15/'24'/g' config-bySecOps.xml
+sed -i '' -E -e 's/16.16.16.16/'10.${1}.${2}.0'/g' config-bySecOps.xml
+sed -i '' -E -e 's/17.17.17.17/'24'/g' config-bySecOps.xml
+
+FWPW=`php pw.php 4Y4qphauPflcarg610Bt`
+OXIPW=`php pw.php jJVoAWEbgeeAqT9flN29`
+sed -i '' -E -e 's/18.18.18.18/'10.${1}.${2}.128'/g' config-bySecOps.xml
+sed -i '' -E -e 's/19.19.19.19/'26'/g' config-bySecOps.xml
+sed -i '' -E -e 's/20.20.20.20/'172.17.${1}.0'/g' config-bySecOps.xml
+sed -i '' -E -e 's/21.21.21.21/'24'/g' config-bySecOps.xml
+sed -i '' -E -e 's|22.22.22.22|'$FWPW'|g' config-bySecOps.xml
+sed -i '' -E -e 's|23.23.23.23|'$OXIPW'|g' config-bySecOps.xml
+
+cp config-bySecOps.xml /usr/local/etc/config-bySecOps.xml
 
 # 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
 # 2. Install bash to support Azure Backup integration

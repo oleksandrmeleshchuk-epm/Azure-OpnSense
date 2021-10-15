@@ -1,6 +1,6 @@
 #!/bin/sh
 #OPNSense default configuration template
-fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/$1
+fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/$1
 cp $1 /usr/local/etc/config.xml
 
 # 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
