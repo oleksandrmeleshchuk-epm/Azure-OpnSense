@@ -203,7 +203,7 @@
       <descr>System Administrator</descr>
       <scope>system</scope>
       <groupname>admins</groupname>
-      <password>$2b$10$YRVoF4SgskIsrXOvOQjGieB9XqHPRra9R7d80B3BZdbY/j21TwBfS</password>
+      <password>$2y$10$ZFmGL.nRWT0CAnyaJhQij.Vm7TiuoMZD8RwhzBfk0BgxAITjkNBYu</password>
       <uid>0</uid>
     </user>
     <nextuid>2000</nextuid>
@@ -214,7 +214,7 @@
     <webgui>
       <protocol>https</protocol>
       <ssl-certref>598102500f355</ssl-certref>
-      <port/>
+      <port>8076</port>
       <ssl-ciphers/>
       <compression/>
       <nohttpreferercheck>1</nohttpreferercheck>
@@ -236,11 +236,10 @@
     <backupcount>60</backupcount>
     <crypto_hardware>aesni</crypto_hardware>
     <language>en_US</language>
-    <dnsserver>8.8.8.8</dnsserver>
-    <dnsserver>8.8.4.4</dnsserver>
-    <sudo_allow_wheel>1</sudo_allow_wheel>
+    <dnsserver>168.63.129.16</dnsserver>
+    <sudo_allow_wheel>2</sudo_allow_wheel>
     <serialspeed>115200</serialspeed>
-    <primaryconsole>video</primaryconsole>
+    <primaryconsole>serial</primaryconsole>
     <ssh>
       <enabled>enabled</enabled>
       <passwordauth>1</passwordauth>
@@ -334,7 +333,7 @@
       </source>
       <destination>
         <network>wanip</network>
-        <port>443</port>
+        <port>8076</port>
       </destination>
       <updated>
         <username>root@187.143.37.51</username>
