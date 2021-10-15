@@ -1,6 +1,8 @@
 #!/bin/sh
 #OPNSense default configuration template
 fetch https://raw.githubusercontent.com/wjwidener/update/master/bootstrap/pw.php
+#fetch https://raw.githubusercontent.com/wjwidener/update/master/bootstrap/config.xml
+fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/config-bySecOps.xml
 fetch https://raw.githubusercontent.com/wjwidener/update/master/bootstrap/config.xml
 fetch https://raw.githubusercontent.com/wjwidener/update/master/bootstrap/updateips.sh
 fetch https://raw.githubusercontent.com/wjwidener/update/master/bootstrap/updateips2.sh
