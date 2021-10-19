@@ -24,6 +24,17 @@
 				"description": "OPN NVA Manchine Name"
 			}
 		},
+		"ProjectName": {
+			"type": "string",
+			"allowedValues": [
+				"nMrkt",
+				"SecOps,"
+				"Default"
+			],
+			"metadata": {
+				"description": "Select your Project name from the list (if present), otherwise select SecOps"
+			}
+		},
 		"ProjectNetworkCIDROctet": {
 			"type": "string",
 			"defaultValue": "00",
@@ -103,6 +114,17 @@
 			"defaultValue": "configureopnsense.sh",
 			"metadata": {
 				"description": "Shell Script to be executed"
+			}
+		},
+		"OpnSenseVersion": {
+			"type": "string",
+			"defaultValue": "21.7",
+			"allowedValues": [
+				"21.7",
+				"21.10"
+			],
+			"metadata": {
+				"description": "OpnSense Release version"
 			}
 		},
 		"OpnConfigFile": {
@@ -495,7 +517,7 @@
 					"fileUris": [
 						"[concat(parameters('OPNScriptURI'),parameters('ShellScriptName'))]" 
 					],
-					"commandToExecute": "[concat('sh ',parameters('ShellScriptName'),' ',parameters('OPNConfigFile'))]"
+					"commandToExecute": "[concat('sh ',parameters('ShellScriptName'),' ',parameters('OPNConfigFile'),' ',parameters('OpnSenseVersion'),' ',parameters('ProjectName'),' ',variables('virtualMachineName'),' ',variables('RGName'))]"
 				}             
 			}
 		}

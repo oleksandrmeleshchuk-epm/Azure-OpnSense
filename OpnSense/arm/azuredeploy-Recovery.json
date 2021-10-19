@@ -51,6 +51,17 @@
 				"description": "Shell Script to be executed"
 			}
 		},
+		"OpnSenseVersion": {
+			"type": "string",
+			"defaultValue": "21.7",
+			"allowedValues": [
+				"21.7",
+				"21.10"
+			],
+			"metadata": {
+				"description": "OpnSense Release version"
+			}
+		},
 		"OpnConfigFile": {
 			"type": "string",
 			"defaultValue": "config.xml",
@@ -154,51 +165,6 @@
 			}
 		},
 		{
-			"name": "[variables('nic1')]",
-			"type": "Microsoft.Network/networkInterfaces",
-			"apiVersion": "2017-06-01",
-			"location": "[variables('location')]",
-			"comments": "This will be your Primary NIC",
-			"properties": {
-				"enableIPForwarding": true,
-				"ipConfigurations": [
-					{
-						"name": "ipconfig1",
-						"properties": {	
-							"subnet": {
-								"id": "[variables('subnet2Ref')]"
-							},
-							"privateIPAllocationMethod": "Dynamic",
-							"publicIpAddress": {
-								"id": "[resourceId('Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]"
-							}
-						}
-					}
-				]
-			}
-		},
-		{
-			"name": "[variables('nic2')]",
-			"type": "Microsoft.Network/networkInterfaces",
-			"apiVersion": "2017-06-01",
-			"location": "[variables('location')]",
-			"comments": "This will be your Secondary NIC",
-			"properties": {
-				"enableIPForwarding": true,
-				"ipConfigurations": [
-					{
-						"name": "ipconfig1",
-						"properties": {
-							"subnet": {
-								"id": "[variables('subnet4Ref')]"
-							},
-						"privateIPAllocationMethod": "Dynamic"
-						}
-					}
-				]
-			}
-		},
-		{
 			"type": "Microsoft.Compute/virtualMachines/extensions",
 			"name": "[concat(variables('virtualMachineName'), '/', variables('extensionName'))]",
 			"apiVersion": "2015-06-15",
@@ -215,7 +181,7 @@
 					"fileUris": [
 						"[concat(parameters('OPNScriptURI'),parameters('ShellScriptName'))]" 
 					],
-					"commandToExecute": "[concat('sh ',parameters('ShellScriptName'),' ',parameters('OPNConfigFile'),' ',variables('RGName'),' ',parameters('BackupRepo'),' ',parameters('GitOrg'),' ',parameters('PAT'))]"
+					"commandToExecute": "[concat('sh ',parameters('ShellScriptName'),' ',parameters('OPNConfigFile'),' ',variables('RGName'),' ',parameters('BackupRepo'),' ',parameters('GitOrg'),' ',parameters('PAT'),' ',parameters('OpnSenseVersion'))]"
 				}             
 			}
 		}

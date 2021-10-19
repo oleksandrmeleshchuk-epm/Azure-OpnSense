@@ -1,6 +1,11 @@
 #!/bin/sh
 #OPNSense default configuration template
-fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/$1
+fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/${1}
+
+sed -i '' -E -e 's/1.1.1.1/'${4}'/g' config.xml
+sed -i '' -E -e 's/2.2.2.2/'${5}'/g' config.xml
+sed -i '' -E -e 's/3.3.3.3/'${5}'/g' config.xml
+
 cp $1 /usr/local/etc/config.xml
 
 # 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
@@ -15,7 +20,7 @@ sed -i "" 's/#PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 #OPNSense
 sed -i "" "s/reboot/shutdown -r +1/g" opnsense-bootstrap.sh.in
-sh ./opnsense-bootstrap.sh.in -y -r "21.7"
+sh ./opnsense-bootstrap.sh.in -y -r "${2}"
 #Adds support to LB probe from IP 168.63.129.16
 fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/lb-conf.sh
 sh ./lb-conf.sh
