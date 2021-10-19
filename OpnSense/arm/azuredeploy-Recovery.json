@@ -120,10 +120,6 @@
 			"apiVersion": "2017-03-30",
 			"location": "[variables('location')]",
 			"comments": "This is the virtual machine that you're building.",
-			"dependsOn": [
-				"[variables('nic1')]",
-				"[variables('nic2')]"
-			],
 			"properties": {
 				"osProfile": {
 					"computerName": "[variables('virtualMachineName')]",
