@@ -10,14 +10,6 @@
 [![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmain%2FOpnSense%2Farm%2Fazuredeploy-Recovery.json)
 [![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmain%2FOpnSense%2Farm%2Fazuredeploy-Recovery.json)
 
-by SecOps (from [wjwidener repo](https://github.com/wjwidener/fwdeployment)) which includes DoubleNAT issue and static IP assignment
-
-** New VNET + OPNsense with two NICs **
-
-[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmain%2FOpnSense%2Farm%2Fazuredeploy-DoubleNAT.json)
-[![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmain%2FOpnSense%2Farm%2Fazuredeploy-DoubleNAT.json)
-
-
 <!-- **New VNET + OPNsense with single NIC**
 
 [![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Foleksandrmeleshchuk-epm%2FAzure-OpnSense%2Fmain%2FOpnSense%2Fazuredeploy-newvnet-single-nic.json)
@@ -31,11 +23,19 @@ by SecOps (from [wjwidener repo](https://github.com/wjwidener/fwdeployment)) whi
 
 Those template allows you to deploy an OPNsense Firewall VM using the opnsense-bootsrtap installation method. It creates an FreeBSD VM, does a silent install of OPNsense using a modified version of opnsense-bootstrap.sh with the settings provided.
 
+During Template execution you'll fill out requiered values like:
+* virtualMachineSize (Size of the VM)
+* virtualMachineNumber (FW id number)
+* ProjectName (based on this data script will fetch corresponding OpnSense config file)
+* ProjectNetworkCIDROctet (Project network CIDR octet (xx.ProjectNetworkCIDROctet.xx.xx) assigned by the SecOps team)
+* NetworkCIDROctet (Specific Network CIDR octet(xx.xx.NetworkCIDROctet.xx))
+* PublicIPAddressSku
+* OpnSenseVersion (Version of the OpnSense instance)
+
 The login credentials are set during the installation process to:
 
 - Username: root
-- Password: 
-
+- Password: default password (You can find it in the Azure Key Vault)
 
 After deployment, you can go to <https://PublicIP:8076>, then input the user and password, to configure the OPNsense firewall.
 

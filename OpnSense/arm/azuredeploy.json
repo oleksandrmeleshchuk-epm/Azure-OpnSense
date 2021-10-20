@@ -27,8 +27,8 @@
 		"ProjectName": {
 			"type": "string",
 			"allowedValues": [
+				"SecOps",
 				"nMrkt",
-				"SecOps,"
 				"Default"
 			],
 			"metadata": {
@@ -60,62 +60,6 @@
 				"description": "Specify Public IP SKU either Basic (lowest cost) or Standard (Required for HA LB)"
 			}
 		},
-		"PeeringNetwork1Name": {
-			"type": "string",
-			"defaultValue": "abbne-nmarket-jenkins-vnet",
-			"metadata": {
-				"description": ""
-			}
-		},
-		"PeeringNetwork1SubID": {
-			"type": "string",
-			"defaultValue": "5d09e3de-5d0a-4882-9ffa-9494b52f1c9a",
-			"metadata": {
-				"description": ""
-			}
-		},
-		"PeeringNetwork1RGName": {
-			"type": "string",
-			"defaultValue": "abbne-nmarket-jenkins",
-			"metadata": {
-				"description": ""
-			}
-		},
-		"PeeringNetwork2Name": {
-			"type": "string",
-			"defaultValue": "ABB-nMarket-Logging-and-Monitoring-vnet",
-			"metadata": {
-				"description": ""
-			}
-		},
-		"PeeringNetwork2SubID": {
-			"type": "string",
-			"defaultValue": "37563f69-f5ca-443e-a71f-df1a7acb739f",
-			"metadata": {
-				"description": ""
-			}
-		},
-		"PeeringNetwork2RGName": {
-			"type": "string",
-			"defaultValue": "ABB-nMarket-Logging-and-Monitoring",
-			"metadata": {
-				"description": ""
-			}
-		},
-		"OpnScriptURI": {
-			"type": "string",
-			"defaultValue": "https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/",
-			"metadata": {
-				"description": ""
-			}
-		},
-		"ShellScriptName": {
-			"type": "string",
-			"defaultValue": "configureopnsense.sh",
-			"metadata": {
-				"description": "Shell Script to be executed"
-			}
-		},
 		"OpnSenseVersion": {
 			"type": "string",
 			"defaultValue": "21.7",
@@ -126,30 +70,34 @@
 			"metadata": {
 				"description": "OpnSense Release version"
 			}
-		},
-		"OpnConfigFile": {
-			"type": "string",
-			"defaultValue": "config.xml",
-			"metadata": {
-				"description": "OPNSense XML Config File"
-			}
 		}
 	},
 	"variables": {
+		"ShellScriptName": "configureopnsense.sh",
+		"OpnConfigFile": "config.xml",
+		"PeeringNetwork1Name": "abbne-nmarket-jenkins-vnet",
+		"PeeringNetwork1RGName": "abbne-nmarket-jenkins",
+		"PeeringNetwork1SubID": "5d09e3de-5d0a-4882-9ffa-9494b52f1c9a",
+		"PeeringNetwork2Name": "ABB-nMarket-Logging-and-Monitoring-vnet",
+		"PeeringNetwork2RGName": "ABB-nMarket-Logging-and-Monitoring",
+		"PeeringNetwork2SubID": "37563f69-f5ca-443e-a71f-df1a7acb739f",
+		"OpnScriptURI": "https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/",
 		"TempUsername": "devops",
 		"TempPassword": "[concat('P', uniqueString(subscription().subscriptionId), '!')]",
 		"extensionName":"CustomScript",
 		"RGName": "[toLower(resourceGroup().name)]",
 		"virtualNetworkName": "[concat(variables('RGName'), '-vnet')]",
-		"PeeringNetworkName1": "[parameters('PeeringNetwork1Name')]",
-		"SubIDPeeringNetworkName1": "[parameters('PeeringNetwork1SubID')]",
-		"SubIDPeeringRGName1": "[parameters('PeeringNetwork1RGName')]",
-		"PeeringNetworkName2": "[parameters('PeeringNetwork2Name')]",
-		"SubIDPeeringNetworkName2": "[parameters('PeeringNetwork2SubID')]",
-		"SubIDPeeringRGName2": "[parameters('PeeringNetwork2RGName')]",
+		"PeeringNetworkName1": "[variables('PeeringNetwork1Name')]",
+		"SubIDPeeringNetworkName1": "[variables('PeeringNetwork1SubID')]",
+		"SubIDPeeringRGName1": "[variables('PeeringNetwork1RGName')]",
+		"PeeringNetworkName2": "[variables('PeeringNetwork2Name')]",
+		"SubIDPeeringNetworkName2": "[variables('PeeringNetwork2SubID')]",
+		"SubIDPeeringRGName2": "[variables('PeeringNetwork2RGName')]",
 		"virtualMachineName": "[concat(variables('RGName'), '-fw', parameters('virtualMachineNumber'))]",
 		"nic1": "[concat(variables('virtualMachineName'), '-nic1')]",
 		"nic2": "[concat(variables('virtualMachineName'), '-nic2')]",
+		"SecOpsnextHopAddress": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.39')]",
+		"nextHopAddress": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.36')]",
 		"subnetAddressSpace": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.0/24')]",
 		"subnetGatewaySubnet": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.128/26')]",
 		"subnetfirewall-frontend": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.0/27')]",
@@ -230,8 +178,8 @@
 						"name": "ToInternet",
 						"properties": {
 							"addressPrefix": "0.0.0.0/0",
-							"nextHopType": "VirtualAppliance", 
-							"nextHopIpAddress": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.36')]"
+							"nextHopType": "VirtualAppliance",
+							"nextHopIpAddress":  "[if(equals(parameters('ProjectName'), 'SecOps'), variables('SecOpsnextHopAddress'), variables('nextHopAddress'))]"
 						}
 					},
 					{
@@ -286,9 +234,6 @@
 							"addressPrefix": "[variables('subnetmanagement')]",
 							"networkSecurityGroup": {
 								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
-							},
-							"routeTable": {
-								"id": "[resourceId('Microsoft.Network/routeTables', variables('routeTableName'))]"
 							}
 						}
 					},
@@ -298,9 +243,6 @@
 							"addressPrefix": "[variables('subnetfirewall-backend')]",
 							"networkSecurityGroup": {
 								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
-							},
-							"routeTable": {
-								"id": "[resourceId('Microsoft.Network/routeTables', variables('routeTableName'))]"
 							}
 						}
 					}
@@ -515,9 +457,9 @@
 				"autoUpgradeMinorVersion": false,
 				"settings": {
 					"fileUris": [
-						"[concat(parameters('OPNScriptURI'),parameters('ShellScriptName'))]" 
+						"[concat(variables('OPNScriptURI'),parameters('ShellScriptName'))]" 
 					],
-					"commandToExecute": "[concat('sh ',parameters('ShellScriptName'),' ',parameters('OPNConfigFile'),' ',parameters('OpnSenseVersion'),' ',parameters('ProjectName'),' ',variables('virtualMachineName'),' ',variables('RGName'))]"
+					"commandToExecute": "[concat('sh ',variables('ShellScriptName'),' ',variables('OPNConfigFile'),' ',parameters('OpnSenseVersion'),' ',parameters('ProjectName'),' ',parameters('ProjectNetworkCIDROctet'),' ',parameters('NetworkCIDROctet'),' ',variables('RGName'),' ',variables('virtualMachineName'))]"
 				}             
 			}
 		}
