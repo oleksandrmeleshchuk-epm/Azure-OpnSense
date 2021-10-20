@@ -659,14 +659,14 @@ XwKBgQCXnF22bwW1ix8thgDN8e5cA68HF0U5sMDXADR3Dq+rK9WJglAfKLnSUdTc&#xD;
     </AcmeClient>
     <ZabbixAgent version="1.2.4">
       <local>
-        <hostname>OPNsense.localdomain</hostname>
+        <hostname>22.22.22.22.23.23.23.23</hostname>
       </local>
       <settings>
         <main>
           <enabled>1</enabled>
           <serverList>zabbix.siem.nmarket.abb,172.26.20.6</serverList>
           <listenPort>10050</listenPort>
-          <listenIP>10.79.19.39</listenIP>
+          <listenIP>0.0.0.0</listenIP>
           <sourceIP/>
           <syslogEnable>0</syslogEnable>
           <logFileSize>100</logFileSize>

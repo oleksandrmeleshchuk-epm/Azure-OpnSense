@@ -457,7 +457,7 @@
 				"autoUpgradeMinorVersion": false,
 				"settings": {
 					"fileUris": [
-						"[concat(variables('OPNScriptURI'),parameters('ShellScriptName'))]" 
+						"[concat(variables('OPNScriptURI'),variables('ShellScriptName'))]" 
 					],
 					"commandToExecute": "[concat('sh ',variables('ShellScriptName'),' ',variables('OPNConfigFile'),' ',parameters('OpnSenseVersion'),' ',parameters('ProjectName'),' ',parameters('ProjectNetworkCIDROctet'),' ',parameters('NetworkCIDROctet'),' ',variables('RGName'),' ',variables('virtualMachineName'))]"
 				}             
