@@ -198,7 +198,7 @@
       <priv>user-shell-access</priv>
       <priv>page-all</priv>
     </group>
-	<group>
+    <group>
       <name>backup</name>
       <description>backup configs</description>
       <gid>2000</gid>
@@ -240,7 +240,6 @@
     </webgui>
     <disablenatreflection>yes</disablenatreflection>
     <usevirtualterminal>1</usevirtualterminal>
-    <disableconsolemenu>1</disableconsolemenu>
     <disablechecksumoffloading>1</disablechecksumoffloading>
     <disablesegmentationoffloading>1</disablesegmentationoffloading>
     <disablelargereceiveoffloading>1</disablelargereceiveoffloading>

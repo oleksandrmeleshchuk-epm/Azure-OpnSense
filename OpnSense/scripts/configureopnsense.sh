@@ -1,8 +1,6 @@
 #!/bin/sh
 #OPNSense default configuration template
 fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/${1}
-fetch https://raw.githubusercontent.com/wjwidener/update/master/bootstrap/pw.php
-
 sed -i '' -E -e 's/1.1.1.1/'10.${4}.${5}.7'/g' config.xml
 sed -i '' -E -e 's/2.2.2.2/'27'/g' config.xml
 sed -i '' -E -e 's/3.3.3.3/'10.${4}.${5}.39'/g' config.xml
@@ -40,7 +38,8 @@ sed -i "" 's/#PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config
 sed -i "" "s/reboot/shutdown -r +1/g" opnsense-bootstrap.sh.in
 sh ./opnsense-bootstrap.sh.in -y -r "${2}"
 
-setenv FWPW `php pw.php $8`
+fetch https://raw.githubusercontent.com/wjwidener/update/master/bootstrap/pw.php
+setenv FWPW 'php pw.php ${8}'
 sed -i '' -E -e 's|24.24.24.24|'$FWPW'|g' config.xml
 
 cp $1 /usr/local/etc/config.xml

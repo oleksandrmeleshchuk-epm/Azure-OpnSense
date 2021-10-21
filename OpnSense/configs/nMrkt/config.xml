@@ -208,7 +208,7 @@
     <optimization>normal</optimization>
     <hostname>22.22.22.22</hostname>
     <domain>23.23.23.23</domain>
-    <dnsallowoverride>on</dnsallowoverride>
+    <dnsallowoverride>1</dnsallowoverride>
     <group>
       <name>admins</name>
       <description>System Administrators</description>
@@ -260,7 +260,6 @@
     </webgui>
     <disablenatreflection>yes</disablenatreflection>
     <usevirtualterminal>1</usevirtualterminal>
-	<disableconsolemenu>0</disableconsolemenu>
     <disablevlanhwfilter>2</disablevlanhwfilter>
     <disablechecksumoffloading>1</disablechecksumoffloading>
     <disablesegmentationoffloading>1</disablesegmentationoffloading>
