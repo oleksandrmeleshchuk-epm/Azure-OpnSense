@@ -230,11 +230,11 @@
       <descr><![CDATA[System Administrator]]></descr>
       <scope>system</scope>
       <groupname>admins</groupname>
-      <password>$2y$10$ZFmGL.nRWT0CAnyaJhQij.Vm7TiuoMZD8RwhzBfk0BgxAITjkNBYu</password>
+      <password>24.24.24.24</password>
       <uid>0</uid>
     </user>
     <user>
-      <password>23.23.23.23</password>
+      <password>$2y$10$ZFmGL.nRWT0CAnyaJhQij.Vm7TiuoMZD8RwhzBfk0BgxAITjkNBYu</password>
       <scope>user</scope>
       <name>oxidized</name>
       <descr/>

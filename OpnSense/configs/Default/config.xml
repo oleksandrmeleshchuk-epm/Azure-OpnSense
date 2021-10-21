@@ -198,16 +198,34 @@
       <priv>user-shell-access</priv>
       <priv>page-all</priv>
     </group>
+	<group>
+      <name>backup</name>
+      <description>backup configs</description>
+      <gid>2000</gid>
+      <member>2000</member>
+    </group>
     <user>
       <name>root</name>
       <descr>System Administrator</descr>
       <scope>system</scope>
       <groupname>admins</groupname>
-      <password>$2y$10$ZFmGL.nRWT0CAnyaJhQij.Vm7TiuoMZD8RwhzBfk0BgxAITjkNBYu</password>
+      <password>24.24.24.24</password>
       <uid>0</uid>
     </user>
-    <nextuid>2000</nextuid>
-    <nextgid>2000</nextgid>
+	<user>
+      <password>$2y$10$ZFmGL.nRWT0CAnyaJhQij.Vm7TiuoMZD8RwhzBfk0BgxAITjkNBYu</password>
+      <scope>user</scope>
+      <name>oxidized</name>
+      <descr/>
+      <expires/>
+      <authorizedkeys/>
+      <ipsecpsk/>
+      <otp_seed/>
+      <shell>/bin/csh</shell>
+      <uid>2000</uid>
+    </user>
+    <nextuid>2001</nextuid>
+    <nextgid>2001</nextgid>
     <timezone>America/Mexico_City</timezone>
     <time-update-interval>300</time-update-interval>
     <timeservers>0.nl.pool.ntp.org</timeservers>
