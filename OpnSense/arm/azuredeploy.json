@@ -75,7 +75,7 @@
 	"variables": {
 		"OpnScriptURI": "https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/",
 		"TempUsername": "devops",
-		"TempPassword": "[concat('P', uniqueString(subscription().subscriptionId), deployment().name)]",
+		"TempPassword": "[concat('P', uniqueString(subscription().subscriptionId), uniqueString(deployment().name))]",
 		"ShellScriptName": "configureopnsense.sh",
 		"OpnConfigFile": "config.xml",
 		"PeeringNetwork1Name": "abbne-nmarket-jenkins-vnet",
