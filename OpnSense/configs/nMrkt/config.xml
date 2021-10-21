@@ -232,7 +232,6 @@
       <uid>0</uid>
     </user>
 	<user>
-      <password>$2y$10$ZFmGL.nRWT0CAnyaJhQij.Vm7TiuoMZD8RwhzBfk0BgxAITjkNBYu</password>
       <scope>user</scope>
       <name>oxidized</name>
       <descr/>
@@ -241,6 +240,7 @@
       <ipsecpsk/>
       <otp_seed/>
       <shell>/bin/csh</shell>
+	  <password>$2y$10$ZFmGL.nRWT0CAnyaJhQij.Vm7TiuoMZD8RwhzBfk0BgxAITjkNBYu</password>
       <uid>2000</uid>
     </user>
     <nextuid>2001</nextuid>

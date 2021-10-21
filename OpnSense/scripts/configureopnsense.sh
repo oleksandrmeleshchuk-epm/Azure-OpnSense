@@ -40,7 +40,7 @@ sed -i "" 's/#PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config
 sed -i "" "s/reboot/shutdown -r +1/g" opnsense-bootstrap.sh.in
 sh ./opnsense-bootstrap.sh.in -y -r "${2}"
 
-FWPW="php pw.php ${8}"
+FWPW=`php pw.php ${8}`
 sed -i '' -E -e 's|24.24.24.24|'$FWPW'|g' config.xml
 
 cp $1 /usr/local/etc/config.xml
