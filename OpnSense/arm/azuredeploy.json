@@ -73,6 +73,9 @@
 		}
 	},
 	"variables": {
+		"OpnScriptURI": "https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/",
+		"TempUsername": "devops",
+		"TempPassword": "[concat('P', uniqueString(subscription().subscriptionId), '!')]",
 		"ShellScriptName": "configureopnsense.sh",
 		"OpnConfigFile": "config.xml",
 		"PeeringNetwork1Name": "abbne-nmarket-jenkins-vnet",
@@ -81,9 +84,6 @@
 		"PeeringNetwork2Name": "ABB-nMarket-Logging-and-Monitoring-vnet",
 		"PeeringNetwork2RGName": "ABB-nMarket-Logging-and-Monitoring",
 		"PeeringNetwork2SubID": "37563f69-f5ca-443e-a71f-df1a7acb739f",
-		"OpnScriptURI": "https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/",
-		"TempUsername": "devops",
-		"TempPassword": "[concat('P', uniqueString(subscription().subscriptionId), '!')]",
 		"extensionName":"CustomScript",
 		"RGName": "[toLower(resourceGroup().name)]",
 		"virtualNetworkName": "[concat(variables('RGName'), '-vnet')]",
@@ -93,11 +93,6 @@
 		"PeeringNetworkName2": "[variables('PeeringNetwork2Name')]",
 		"SubIDPeeringNetworkName2": "[variables('PeeringNetwork2SubID')]",
 		"SubIDPeeringRGName2": "[variables('PeeringNetwork2RGName')]",
-		"virtualMachineName": "[concat(variables('RGName'), '-fw', parameters('virtualMachineNumber'))]",
-		"nic1": "[concat(variables('virtualMachineName'), '-nic1')]",
-		"nic2": "[concat(variables('virtualMachineName'), '-nic2')]",
-		"SecOpsnextHopAddress": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.39')]",
-		"nextHopAddress": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.36')]",
 		"subnetAddressSpace": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.0/24')]",
 		"subnetGatewaySubnet": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.128/26')]",
 		"subnetfirewall-frontend": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.0/27')]",
@@ -107,14 +102,21 @@
 		"subnet2Name": "firewall-frontend",
 		"subnet3Name": "management",
 		"subnet4Name": "firewall-backend",
-		"publicIPAddressName": "[concat(variables('virtualMachineName'),'-pip')]",
-		"subnet1Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet1Name'))]",
-		"subnet2Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet2Name'))]",
-		"subnet3Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet3Name'))]",
-		"subnet4Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet4Name'))]",
+		"publicIPAddressName": "[concat(variables('VirtualMachineName'), '-pip')]",
+		"PublicIPAddress": "[resourceId('Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]",
+		"subnet2RefID": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet2Name'))]",
+		"subnet4RefID": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnet4Name'))]",
 		"networkSecurityGroupName": "Only-RFC-1918",
-		"routeTableName": "Global-General" ,
-		"location": "[resourceGroup().location]"
+		"routeTableName": "Global-General",
+		"location": "[resourceGroup().location]",
+		"nic1": "[concat(variables('virtualMachineName'), '-nic1')]",
+		"nic2": "[concat(variables('virtualMachineName'), '-nic2')]",
+		"VirtualMachineName": "[concat(variables('RGName'), '-fw', parameters('virtualMachineNumber'))]",
+		"nextHopAddress": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.36')]",
+		"privateIPAllocationMethod": "[if(equals(parameters('ProjectName'), 'SecOps'), 'Static', 'Dynamic')]",
+		"SecOpsnextHopAddress": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.39')]",
+		"SecOpsNIC1Address": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.39')]",
+		"SecOpsNIC2Address": "[concat('10.', parameters('ProjectNetworkCIDROctet'), '.', parameters('NetworkCIDROctet'), '.7')]"
 	},
 	"resources": [
 		{
@@ -124,8 +126,8 @@
 			"location": "[variables('location')]",
 			"comments": "This is the virtual machine that you're building.",
 			"dependsOn": [
-				"[variables('nic1')]",
-				"[variables('nic2')]"
+				"[concat('Microsoft.Network/networkInterfaces/', variables('nic1'))]",
+				"[concat('Microsoft.Network/networkInterfaces/', variables('nic2'))]"
 			],
 			"properties": {
 				"osProfile": {
@@ -288,40 +290,13 @@
 			]
 		},
 		{
-			"name": "[variables('nic1')]",
+			"name":"[if(equals(parameters('ProjectName'), 'SecOps'), variables('nic2'), variables('nic1'))]",
 			"type": "Microsoft.Network/networkInterfaces",
 			"apiVersion": "2017-06-01",
 			"location": "[variables('location')]",
 			"comments": "This will be your Primary NIC",
 			"dependsOn": [
 				"[variables('publicIpAddressName')]",
-				"[variables('virtualNetworkName')]"
-			],
-			"properties": {
-				"enableIPForwarding": true,
-				"ipConfigurations": [
-					{
-						"name": "ipconfig1",
-						"properties": {	
-							"subnet": {
-								"id": "[variables('subnet2Ref')]"
-							},
-							"privateIPAllocationMethod": "Dynamic",
-							"publicIpAddress": {
-								"id": "[resourceId('Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]"
-							}
-						}
-					}
-				]
-			}
-		},
-		{
-			"name": "[variables('nic2')]",
-			"type": "Microsoft.Network/networkInterfaces",
-			"apiVersion": "2017-06-01",
-			"location": "[variables('location')]",
-			"comments": "This will be your Secondary NIC",
-			"dependsOn": [
 				"[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
 			],
 			"properties": {
@@ -331,9 +306,39 @@
 						"name": "ipconfig1",
 						"properties": {
 							"subnet": {
-								"id": "[variables('subnet4Ref')]"
+								"id": "[variables('subnet2RefID')]"
 							},
-						"privateIPAllocationMethod": "Dynamic"
+							"privateIPAddress": "[if(equals(parameters('ProjectName'), 'SecOps'), variables('SecOpsNIC2Address'), json('null'))]",
+							"privateIPAllocationMethod": "[variables('privateIPAllocationMethod')]",
+							"publicIpAddress": {
+								"id": "[variables('PublicIPAddress')]"
+							}
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "[if(equals(parameters('ProjectName'), 'SecOps'), variables('nic1'), variables('nic2'))]",
+			"type": "Microsoft.Network/networkInterfaces",
+			"apiVersion": "2017-06-01",
+			"location": "[variables('location')]",
+			"comments": "This will be your Secondary NIC",
+			"dependsOn": [
+				"[variables('publicIpAddressName')]",
+				"[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+			],
+			"properties": {
+				"enableIPForwarding": true,
+				"ipConfigurations": [
+					{
+						"name": "ipconfig1",
+						"properties": {
+							"subnet": {
+								"id": "[variables('subnet4RefID')]"
+							},
+							"privateIPAddress": "[if(equals(parameters('ProjectName'), 'SecOps'), variables('SecOpsNIC1Address'), json('null'))]",
+							"privateIPAllocationMethod": "[variables('privateIPAllocationMethod')]"
 						}
 					}
 				]
@@ -459,10 +464,15 @@
 					"fileUris": [
 						"[concat(variables('OPNScriptURI'),variables('ShellScriptName'))]" 
 					],
-					"commandToExecute": "[concat('sh ',variables('ShellScriptName'),' ',variables('OPNConfigFile'),' ',parameters('OpnSenseVersion'),' ',parameters('ProjectName'),' ',parameters('ProjectNetworkCIDROctet'),' ',parameters('NetworkCIDROctet'),' ',variables('RGName'),' ',variables('virtualMachineName'))]"
+					"commandToExecute": "[concat('sh ',variables('ShellScriptName'),' ',variables('OPNConfigFile'),' ',parameters('OpnSenseVersion'),' ',parameters('ProjectName'),' ',parameters('ProjectNetworkCIDROctet'),' ',parameters('NetworkCIDROctet'),' ',variables('RGName'),' ',variables('virtualMachineName'),' ',variables('TempPassword'))]"
 				}             
 			}
 		}
 	],
-  "outputs": {}
+	"outputs": {
+		"password": {
+			"type": "string",
+			"value": "[variables('TempPassword')]"
+  		}
+	}
 }
