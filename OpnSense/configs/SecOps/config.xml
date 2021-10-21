@@ -254,14 +254,13 @@
       <port>8076</port>
       <ssl-ciphers/>
       <interfaces>lan</interfaces>
-	  <ssl-certref>616ec1cf5d848</ssl-certref>
+      <ssl-certref>616ec1cf5d848</ssl-certref>
       <compression/>
       <nodnsrebindcheck>1</nodnsrebindcheck>
       <nohttpreferercheck>1</nohttpreferercheck>
     </webgui>
     <disablenatreflection>yes</disablenatreflection>
     <usevirtualterminal>1</usevirtualterminal>
-    <disableconsolemenu>1</disableconsolemenu>
     <disablevlanhwfilter>2</disablevlanhwfilter>
     <disablechecksumoffloading>1</disablechecksumoffloading>
     <disablesegmentationoffloading>1</disablesegmentationoffloading>
