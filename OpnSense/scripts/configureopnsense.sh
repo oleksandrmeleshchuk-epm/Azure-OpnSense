@@ -26,7 +26,7 @@ sed -i '' -E -e 's/22.22.22.22/'${7}'/g' config.xml
 sed -i '' -E -e 's/23.23.23.23/'${6}'/g' config.xml
 
 setenv FWPW `php pw.php ${8}`
-sed -i '' -E -e 's|24.24.24.24|'$FWPW'|g' config.xml
+sed -i '' -E -e 's/24.24.24.24/'${FWPW}'/g' config.xml
 
 cp $1 /usr/local/etc/config.xml
 
