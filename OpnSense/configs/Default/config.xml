@@ -186,8 +186,8 @@
   </sysctl>
   <system>
     <optimization>normal</optimization>
-    <hostname>OPNsense</hostname>
-    <domain>localhost</domain>
+    <hostname>22.22.22.22</hostname>
+    <domain>23.23.23.23</domain>
     <dnsallowoverride>1</dnsallowoverride>
     <group>
       <name>admins</name>
@@ -217,6 +217,7 @@
       <port>8076</port>
       <ssl-ciphers/>
       <compression/>
+	  <interfaces>lan</interfaces>
       <nohttpreferercheck>1</nohttpreferercheck>
     </webgui>
     <disablenatreflection>yes</disablenatreflection>
@@ -241,6 +242,7 @@
     <serialspeed>115200</serialspeed>
     <primaryconsole>serial</primaryconsole>
     <ssh>
+      <interfaces>lan</interfaces>
       <enabled>enabled</enabled>
       <passwordauth>1</passwordauth>
       <permitrootlogin>1</permitrootlogin>
