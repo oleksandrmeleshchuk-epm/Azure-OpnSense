@@ -260,6 +260,7 @@
     </webgui>
     <disablenatreflection>yes</disablenatreflection>
     <usevirtualterminal>1</usevirtualterminal>
+	<disableconsolemenu>0</disableconsolemenu>
     <disablevlanhwfilter>2</disablevlanhwfilter>
     <disablechecksumoffloading>1</disablechecksumoffloading>
     <disablesegmentationoffloading>1</disablesegmentationoffloading>

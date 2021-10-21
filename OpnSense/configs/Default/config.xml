@@ -240,7 +240,7 @@
     </webgui>
     <disablenatreflection>yes</disablenatreflection>
     <usevirtualterminal>1</usevirtualterminal>
-    <disableconsolemenu>1</disableconsolemenu>
+    <disableconsolemenu>0</disableconsolemenu>
     <disablechecksumoffloading>1</disablechecksumoffloading>
     <disablesegmentationoffloading>1</disablesegmentationoffloading>
     <disablelargereceiveoffloading>1</disablelargereceiveoffloading>
