@@ -4,204 +4,203 @@
   <theme>opnsense</theme>
   <sysctl>
     <item>
-      <descr><![CDATA[Disable the pf ftp proxy handler.]]></descr>
+      <descr>Disable the pf ftp proxy handler.</descr>
       <tunable>debug.pfftpproxy</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Increase UFS read-ahead speeds to match the state of hard drives and NCQ.]]></descr>
+      <descr>Increase UFS read-ahead speeds to match the state of hard drives and NCQ.</descr>
       <tunable>vfs.read_max</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Set the ephemeral port range to be lower.]]></descr>
+      <descr>Set the ephemeral port range to be lower.</descr>
       <tunable>net.inet.ip.portrange.first</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Drop packets to closed TCP ports without returning a RST]]></descr>
+      <descr>Drop packets to closed TCP ports without returning a RST</descr>
       <tunable>net.inet.tcp.blackhole</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Do not send ICMP port unreachable messages for closed UDP ports]]></descr>
+      <descr>Do not send ICMP port unreachable messages for closed UDP ports</descr>
       <tunable>net.inet.udp.blackhole</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Randomize the ID field in IP packets (default is 0: sequential IP IDs)]]></descr>
+      <descr>Randomize the ID field in IP packets (default is 0: sequential IP IDs)</descr>
       <tunable>net.inet.ip.random_id</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[
+      <descr>
         Source routing is another way for an attacker to try to reach non-routable addresses behind your box.
         It can also be used to probe for information about your internal networks. These functions come enabled
         as part of the standard FreeBSD core system.
-      ]]></descr>
+      </descr>
       <tunable>net.inet.ip.sourceroute</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[
+      <descr>
         Source routing is another way for an attacker to try to reach non-routable addresses behind your box.
         It can also be used to probe for information about your internal networks. These functions come enabled
         as part of the standard FreeBSD core system.
-      ]]></descr>
+      </descr>
       <tunable>net.inet.ip.accept_sourceroute</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[
+      <descr>
         This option turns off the logging of redirect packets because there is no limit and this could fill
         up your logs consuming your whole hard drive.
-      ]]></descr>
+      </descr>
       <tunable>net.inet.icmp.log_redirect</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Drop SYN-FIN packets (breaks RFC1379, but nobody uses it anyway)]]></descr>
+      <descr>Drop SYN-FIN packets (breaks RFC1379, but nobody uses it anyway)</descr>
       <tunable>net.inet.tcp.drop_synfin</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Enable sending IPv6 redirects]]></descr>
+      <descr>Enable sending IPv6 redirects</descr>
       <tunable>net.inet6.ip6.redirect</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Enable privacy settings for IPv6 (RFC 4941)]]></descr>
+      <descr>Enable privacy settings for IPv6 (RFC 4941)</descr>
       <tunable>net.inet6.ip6.use_tempaddr</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Prefer privacy addresses and use them over the normal addresses]]></descr>
+      <descr>Prefer privacy addresses and use them over the normal addresses</descr>
       <tunable>net.inet6.ip6.prefer_tempaddr</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Generate SYN cookies for outbound SYN-ACK packets]]></descr>
+      <descr>Generate SYN cookies for outbound SYN-ACK packets</descr>
       <tunable>net.inet.tcp.syncookies</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Maximum incoming/outgoing TCP datagram size (receive)]]></descr>
+      <descr>Maximum incoming/outgoing TCP datagram size (receive)</descr>
       <tunable>net.inet.tcp.recvspace</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Maximum incoming/outgoing TCP datagram size (send)]]></descr>
+      <descr>Maximum incoming/outgoing TCP datagram size (send)</descr>
       <tunable>net.inet.tcp.sendspace</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Do not delay ACK to try and piggyback it onto a data packet]]></descr>
+      <descr>Do not delay ACK to try and piggyback it onto a data packet</descr>
       <tunable>net.inet.tcp.delayed_ack</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Maximum outgoing UDP datagram size]]></descr>
+      <descr>Maximum outgoing UDP datagram size</descr>
       <tunable>net.inet.udp.maxdgram</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Handling of non-IP packets which are not passed to pfil (see if_bridge(4))]]></descr>
+      <descr>Handling of non-IP packets which are not passed to pfil (see if_bridge(4))</descr>
       <tunable>net.link.bridge.pfil_onlyip</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Set to 1 to additionally filter on the physical interface for locally destined packets]]></descr>
+      <descr>Set to 1 to additionally filter on the physical interface for locally destined packets</descr>
       <tunable>net.link.bridge.pfil_local_phys</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Set to 0 to disable filtering on the incoming and outgoing member interfaces.]]></descr>
+      <descr>Set to 0 to disable filtering on the incoming and outgoing member interfaces.</descr>
       <tunable>net.link.bridge.pfil_member</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Set to 1 to enable filtering on the bridge interface]]></descr>
+      <descr>Set to 1 to enable filtering on the bridge interface</descr>
       <tunable>net.link.bridge.pfil_bridge</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Allow unprivileged access to tap(4) device nodes]]></descr>
+      <descr>Allow unprivileged access to tap(4) device nodes</descr>
       <tunable>net.link.tap.user_open</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Randomize PID's (see src/sys/kern/kern_fork.c: sysctl_kern_randompid())]]></descr>
+      <descr>Randomize PID's (see src/sys/kern/kern_fork.c: sysctl_kern_randompid())</descr>
       <tunable>kern.randompid</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Maximum size of the IP input queue]]></descr>
+      <descr>Maximum size of the IP input queue</descr>
       <tunable>net.inet.ip.intr_queue_maxlen</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Disable CTRL+ALT+Delete reboot from keyboard.]]></descr>
+      <descr>Disable CTRL+ALT+Delete reboot from keyboard.</descr>
       <tunable>hw.syscons.kbd_reboot</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Enable TCP extended debugging]]></descr>
+      <descr>Enable TCP extended debugging</descr>
       <tunable>net.inet.tcp.log_debug</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Set ICMP Limits]]></descr>
+      <descr>Set ICMP Limits</descr>
       <tunable>net.inet.icmp.icmplim</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[TCP Offload Engine]]></descr>
+      <descr>TCP Offload Engine</descr>
       <tunable>net.inet.tcp.tso</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[UDP Checksums]]></descr>
+      <descr>UDP Checksums</descr>
       <tunable>net.inet.udp.checksum</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Maximum socket buffer size]]></descr>
+      <descr>Maximum socket buffer size</descr>
       <tunable>kern.ipc.maxsockbuf</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Page Table Isolation (Meltdown mitigation, requires reboot.)]]></descr>
+      <descr>Page Table Isolation (Meltdown mitigation, requires reboot.)</descr>
       <tunable>vm.pmap.pti</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Disable Indirect Branch Restricted Speculation (Spectre V2 mitigation)]]></descr>
+      <descr>Disable Indirect Branch Restricted Speculation (Spectre V2 mitigation)</descr>
       <tunable>hw.ibrs_disable</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Hide processes running as other groups]]></descr>
+      <descr>Hide processes running as other groups</descr>
       <tunable>security.bsd.see_other_gids</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Hide processes running as other users]]></descr>
+      <descr>Hide processes running as other users</descr>
       <tunable>security.bsd.see_other_uids</tunable>
       <value>default</value>
     </item>
     <item>
-      <descr><![CDATA[Enable/disable sending of ICMP redirects in response to IP packets for which a better,
-        and for the sender directly reachable, route and next hop is known.]]>
-      </descr>
+      <descr>Enable/disable sending of ICMP redirects in response to IP packets for which a better,
+        and for the sender directly reachable, route and next hop is known.</descr>
       <tunable>net.inet.ip.redirect</tunable>
       <value>0</value>
     </item>
     <item>
-      <descr><![CDATA[
+      <descr>
         Redirect attacks are the purposeful mass-issuing of ICMP type 5 packets. In a normal network, redirects
         to the end stations should not be required. This option enables the NIC to drop all inbound ICMP redirect
         packets without returning a response.
-      ]]></descr>
+      </descr>
       <tunable>net.inet.icmp.drop_redirect</tunable>
       <value>1</value>
     </item>
@@ -210,10 +209,10 @@
     <optimization>normal</optimization>
     <hostname>22.22.22.22</hostname>
     <domain>23.23.23.23</domain>
-    <dnsallowoverride>1</dnsallowoverride>
+    <dnsallowoverride>on</dnsallowoverride>
     <group>
       <name>admins</name>
-      <description><![CDATA[System Administrators]]></description>
+      <description>System Administrators</description>
       <scope>system</scope>
       <gid>1999</gid>
       <member>0</member>
@@ -227,7 +226,7 @@
     </group>
     <user>
       <name>root</name>
-      <descr><![CDATA[System Administrator]]></descr>
+      <descr>System Administrator</descr>
       <scope>system</scope>
       <groupname>admins</groupname>
       <password>24.24.24.24</password>
@@ -314,6 +313,11 @@
     <sudo_allow_wheel>2</sudo_allow_wheel>
     <serialspeed>115200</serialspeed>
     <primaryconsole>serial</primaryconsole>
+    <firmware version="1.0.0">
+      <mirror/>
+      <flavour/>
+    </firmware>
+    <sudo_allow_group>admins</sudo_allow_group>
   </system>
   <interfaces>
     <wan>
@@ -366,6 +370,7 @@
   </dhcpd>
   <unbound>
     <custom_options/>
+    <enable>on</enable>					   
   </unbound>
   <snmpd>
     <syslocation/>
