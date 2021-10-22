@@ -1,7 +1,6 @@
 #!/bin/sh
 #OPNSense default configuration template
 fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/${1}
-fetch https://raw.githubusercontent.com/wjwidener/update/master/bootstrap/pw.php
 sed -i '' -E -e 's/1.1.1.1/'10.${4}.${5}.7'/g' config.xml
 sed -i '' -E -e 's/2.2.2.2/'27'/g' config.xml
 sed -i '' -E -e 's/3.3.3.3/'10.${4}.${5}.39'/g' config.xml
@@ -24,6 +23,11 @@ sed -i '' -E -e 's/20.20.20.20/'172.17.${4}.0'/g' config.xml
 sed -i '' -E -e 's/21.21.21.21/'24'/g' config.xml
 sed -i '' -E -e 's/22.22.22.22/'${7}'/g' config.xml
 sed -i '' -E -e 's/23.23.23.23/'${6}'/g' config.xml
+
+setenv PASSWORD "password=$8&cost=10"
+setenv PASS "curl -X POST --data $PASSWORD https://bcrypt.org/api/generate-hash.json"
+
+sed -i "" "s/24.24.24.24/${PASS}/g" config.xml
 cp -f $1 /usr/local/etc/config.xml
 
 # 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
@@ -39,10 +43,6 @@ sed -i "" 's/#PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config
 #OPNSense
 sed -i "" "s/reboot/shutdown -r +1/g" opnsense-bootstrap.sh.in
 sh ./opnsense-bootstrap.sh.in -y -r "${2}"
-
-setenv FWPW `php pw.php ${8}`
-sed -i "" "s/24.24.24.24/${FWPW}/g" config.xml
-cp -f $1 /usr/local/etc/config.xml
 
 #Adds support to LB probe from IP 168.63.129.16
 fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/lb-conf.sh
