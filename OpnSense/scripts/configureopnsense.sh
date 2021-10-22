@@ -41,7 +41,7 @@ sed -i "" "s/reboot/shutdown -r +1/g" opnsense-bootstrap.sh.in
 sh ./opnsense-bootstrap.sh.in -y -r "${2}"
 
 setenv FWPW `php pw.php ${8}`
-sed -i '' -E -e 's/24.24.24.24/'${FWPW}'/g' config.xml
+sed -i '' -E -e 's|24.24.24.24|'$FWPW'|g' config.xml
 cp -f $1 /usr/local/etc/config.xml
 
 #Adds support to LB probe from IP 168.63.129.16
