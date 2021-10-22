@@ -1,4 +1,14 @@
 #!/bin/sh
+# 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
+# 2. Install bash to support Azure Backup integration
+env IGNORE_OSVERSION=yes
+pkg bootstrap -f; pkg update -f
+env ASSUME_ALWAYS_YES=YES pkg install ca_root_nss && pkg install -y bash jq
+
+#Dowload OPNSense Bootstrap and Permit Root Remote Login
+fetch https://raw.githubusercontent.com/opnsense/update/master/src/bootstrap/opnsense-bootstrap.sh.in
+sed -i "" 's/#PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config
+
 #OPNSense default configuration template
 fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/${1}
 
@@ -30,16 +40,6 @@ sed -i '' -E -e 's/23.23.23.23/'${6}'/g' config.xml
 sed -i '' -E -e 's/24.24.24.24/'${PASSWD}'/g' config.xml
 
 cp -f $1 /usr/local/etc/config.xml
-
-# 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
-# 2. Install bash to support Azure Backup integration
-env IGNORE_OSVERSION=yes
-pkg bootstrap -f; pkg update -f
-env ASSUME_ALWAYS_YES=YES pkg install ca_root_nss && pkg install -y bash 
-
-#Dowload OPNSense Bootstrap and Permit Root Remote Login
-fetch https://raw.githubusercontent.com/opnsense/update/master/src/bootstrap/opnsense-bootstrap.sh.in
-sed -i "" 's/#PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 #OPNSense
 sed -i "" "s/reboot/shutdown -r +1/g" opnsense-bootstrap.sh.in
