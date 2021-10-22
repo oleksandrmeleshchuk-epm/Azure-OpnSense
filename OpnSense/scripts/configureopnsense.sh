@@ -57,16 +57,12 @@ if [ -f $1 ]; then
 		sed -i "" "s/reboot/shutdown -r +1/g" opnsense-bootstrap.sh.in;
 		
 		sh opnsense-bootstrap.sh.in -y -r ${2};
-		if [ -f /etc/config.xml ]; then
-			#Adds support to LB probe from IP 168.63.129.16
-			fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/lb-conf.sh > /dev/null 2>&1
-			sh ./lb-conf.sh
-			rm -rf hash
-			shutdown -r +1
-		else
-			echo "OpnSense installation failed, exiting"
-			exit 1
-		fi
+
+		#Adds support to LB probe from IP 168.63.129.16
+		fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/lb-conf.sh > /dev/null 2>&1
+		sh ./lb-conf.sh
+		rm -rf hash
+		shutdown -r +1
 	else
 		echo "PASSWD variable haven't been set"
 		exit 1
