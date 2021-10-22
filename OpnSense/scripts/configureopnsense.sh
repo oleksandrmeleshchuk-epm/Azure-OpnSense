@@ -27,16 +27,16 @@ sed -i '' -E -e 's/23.23.23.23/'${6}'/g' config.xml
 # 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
 # 2. Install bash to support Azure Backup integration
 env IGNORE_OSVERSION=yes
+env ASSUME_ALWAYS_YES=YES 
 pkg bootstrap -f; pkg update -f
-env ASSUME_ALWAYS_YES=YES pkg install ca_root_nss && pkg install -y bash 
-pkg install -y jq
+pkg install ca_root_nss && pkg install -y bash && pkg install -y jq 
 
-curl -s -X POST --data "password=$8&cost=10" https://bcrypt.org/api/generate-hash.json |  jq -r '.hash' > hash
-set PASSWD = "cat hash"
-if [ "$PASSWD" ];
-then
-	sed -i '' -E -e 's/24.24.24.24/'${PASSWD}'/g' config.xml
-	cp -f $1 /usr/local/etc/config.xml
+curl -s -X POST --data "password=$8&cost=10" https://bcrypt.org/api/generate-hash.json |  jq -r '.hash' > hash 
+set PASSWD = "cat hash" 
+if [ "$PASSWD" ]; 
+then 
+	sed -i '' -E -e 's/24.24.24.24/'${PASSWD}'/g' config.xml 
+	cp -f $1 /usr/local/etc/config.xml 
 
 	#Dowload OPNSense Bootstrap and Permit Root Remote Login
 	fetch https://raw.githubusercontent.com/opnsense/update/master/src/bootstrap/opnsense-bootstrap.sh.in
