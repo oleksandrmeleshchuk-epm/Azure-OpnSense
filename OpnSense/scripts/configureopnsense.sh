@@ -26,35 +26,27 @@ sed -i '' -E -e 's/23.23.23.23/'${6}'/g' config.xml
 
 # 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
 # 2. Install bash to support Azure Backup integration
-env IGNORE_OSVERSION=yes
-env ASSUME_ALWAYS_YES=YES 
-pkg bootstrap -f; pkg update -f
-pkg install ca_root_nss && pkg install -y bash && pkg install -y jq 
+env IGNORE_OSVERSION=yes;
+env ASSUME_ALWAYS_YES=YES; 
+pkg bootstrap -f; pkg update -f;
+pkg install ca_root_nss && pkg install -y bash && pkg install -y jq;
 
-curl -s -X POST --data "password=$8&cost=10" https://bcrypt.org/api/generate-hash.json |  jq -r '.hash' > hash 
-set PASSWD = "cat hash" 
-if [ "$PASSWD" ]; 
-then 
-	sed -i '' -E -e 's/24.24.24.24/'${PASSWD}'/g' config.xml 
-	cp -f $1 /usr/local/etc/config.xml 
-
+curl -s -X POST --data "password=$8&cost=10" https://bcrypt.org/api/generate-hash.json |  jq -r '.hash' > hash;
+set PASSWD = "cat hash";
+if ( "$PASSWD" ) then 
+	sed -i '' -E -e 's/24.24.24.24/'${PASSWD}'/g' config.xml;
+	cp -f $1 /usr/local/etc/config.xml;
+	rm -rf hash;
 	#Dowload OPNSense Bootstrap and Permit Root Remote Login
-	fetch https://raw.githubusercontent.com/opnsense/update/master/src/bootstrap/opnsense-bootstrap.sh.in
-	sed -i "" 's/#PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config
-
+	fetch https://raw.githubusercontent.com/opnsense/update/master/src/bootstrap/opnsense-bootstrap.sh.in;
+	sed -i "" 's/#PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config;
 	#OPNSense
-	sed -i "" "s/reboot/shutdown -r +1/g" opnsense-bootstrap.sh.in
-	sh ./opnsense-bootstrap.sh.in -y -r "${2}"
-
-	rm -rf hash
-
+	sed -i "" "s/reboot/shutdown -r +1/g" opnsense-bootstrap.sh.in;
+	sh ./opnsense-bootstrap.sh.in -y -r "${2}";
 	#Adds support to LB probe from IP 168.63.129.16
-	fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/lb-conf.sh
-	sh ./lb-conf.sh
-
+	fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/lb-conf.sh;
+	sh ./lb-conf.sh;
 	shutdown -r +1
-	
-elif [ -z "$PASSWD" ];
-then
+else
 	exit 1
-fi
+endif
