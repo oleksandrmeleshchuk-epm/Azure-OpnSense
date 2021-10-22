@@ -1,20 +1,6 @@
 #!/bin/sh
-# 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
-# 2. Install bash to support Azure Backup integration
-env IGNORE_OSVERSION=yes
-pkg bootstrap -f; pkg update -f
-env ASSUME_ALWAYS_YES=YES pkg install ca_root_nss && pkg install -y bash jq
-
-#Dowload OPNSense Bootstrap and Permit Root Remote Login
-fetch https://raw.githubusercontent.com/opnsense/update/master/src/bootstrap/opnsense-bootstrap.sh.in
-sed -i "" 's/#PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config
-
 #OPNSense default configuration template
 fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/${1}
-
-curl -s -X POST --data "password=$8&cost=10" https://bcrypt.org/api/generate-hash.json |  jq -r '.hash' > hash
-set PASSWD = "cat hash"
-
 sed -i '' -E -e 's/1.1.1.1/'10.${4}.${5}.7'/g' config.xml
 sed -i '' -E -e 's/2.2.2.2/'27'/g' config.xml
 sed -i '' -E -e 's/3.3.3.3/'10.${4}.${5}.39'/g' config.xml
@@ -37,9 +23,22 @@ sed -i '' -E -e 's/20.20.20.20/'172.17.${4}.0'/g' config.xml
 sed -i '' -E -e 's/21.21.21.21/'24'/g' config.xml
 sed -i '' -E -e 's/22.22.22.22/'${7}'/g' config.xml
 sed -i '' -E -e 's/23.23.23.23/'${6}'/g' config.xml
+
+# 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
+# 2. Install bash to support Azure Backup integration
+env IGNORE_OSVERSION=yes
+pkg bootstrap -f; pkg update -f
+env ASSUME_ALWAYS_YES=YES pkg install ca_root_nss && pkg install -y bash && pkg install -y jq
+
+curl -s -X POST --data "password=$8&cost=10" https://bcrypt.org/api/generate-hash.json |  jq -r '.hash' > hash
+set PASSWD = "cat hash"
 sed -i '' -E -e 's/24.24.24.24/'${PASSWD}'/g' config.xml
 
 cp -f $1 /usr/local/etc/config.xml
+
+#Dowload OPNSense Bootstrap and Permit Root Remote Login
+fetch https://raw.githubusercontent.com/opnsense/update/master/src/bootstrap/opnsense-bootstrap.sh.in
+sed -i "" 's/#PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 #OPNSense
 sed -i "" "s/reboot/shutdown -r +1/g" opnsense-bootstrap.sh.in
