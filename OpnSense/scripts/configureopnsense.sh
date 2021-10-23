@@ -48,7 +48,9 @@ if [ -f $1 ]; then
 	pkg install ca_root_nss && pkg install -y bash && pkg install -y jq && pkg install -y curl;
 	echo "Generating hash from the provided value"
 	curl -s -X POST --data "password=${8}&cost=10" https://bcrypt.org/api/generate-hash.json |  jq -r '.hash' > ./hash;
-
+	
+	cat ./hash;
+	
 	if [ -s ./hash ]; then
 		echo "Hash file exists, proceeding"
 		PASSWD=`cat "./hash"`
