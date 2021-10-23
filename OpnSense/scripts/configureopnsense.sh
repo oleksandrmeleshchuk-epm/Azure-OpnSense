@@ -30,22 +30,38 @@ if [ -f $1 ]; then
 	# 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
 	# 2. Install bash to support Azure Backup integration
 	
-	if [ grep "IGNORE_OSVERSION" /etc/csh.cshrc ];  then
+	if ( grep "IGNORE_OSVERSION" /etc/csh.cshrc );  then
 		echo "IGNORE_OSVERSION is already added"
 	else
 		echo "IGNORE_OSVERSION variable does not exist, adding"
 		echo "setenv IGNORE_OSVERSION yes" >> /etc/csh.cshrc
 	fi
 	
-	if [ grep "ASSUME_ALWAYS_YES" /etc/csh.cshrc ];  then
+	if ( grep "ASSUME_ALWAYS_YES" /etc/csh.cshrc );  then
 		echo "ASSUME_ALWAYS_YES is already added"
 	else
 		echo "ASSUME_ALWAYS_YES variable does not exist, adding"
 		echo "setenv ASSUME_ALWAYS_YES yes" >> /etc/csh.cshrc
 	fi
 	
+	if ( grep "IGNORE_OSVERSION" /etc/csh.cshrc );  then
+		echo "IGNORE_OSVERSION has been successfully added"
+	else
+		echo "IGNORE_OSVERSION has not been added"
+	fi
+	
+	if ( grep "ASSUME_ALWAYS_YES" /etc/csh.cshrc );  then
+		echo "ASSUME_ALWAYS_YES has been successfully added"
+	else
+		echo "ASSUME_ALWAYS_YES has not been added"
+	fi
+	
+	
 	pkg bootstrap -f; pkg update -f;
 	pkg install ca_root_nss && pkg install -y bash && pkg install -y jq && pkg install -y curl;
+	
+	if 
+	
 	echo "Generating hash from the provided value"
 	curl -s -X POST --data "password=${8}&cost=10" https://bcrypt.org/api/generate-hash.json |  jq -r '.hash' > ./hash;
 	
