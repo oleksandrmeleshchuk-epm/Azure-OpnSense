@@ -43,26 +43,41 @@ if [ -f $1 ]; then
 	fi
 	
 	pkg bootstrap -f; pkg update -f
-	pkg install ca_root_nss && pkg install -y bash && pkg install -y jq && pkg install -y curl
+	pkg install ca_root_nss && pkg install -y bash && pkg install -y jq && pkg install -y curl;
+	echo "Generating hash from the provided value"
 	curl -s -X POST --data "password=${8}&cost=10" https://bcrypt.org/api/generate-hash.json |  jq -r '.hash' > ./hash
 
-	if [ -f ./hash ]; then
+	if [ -s ./hash ]; then
+		echo "Hash file exists, proceeding"
 		PASSWD=`cat "./hash"`
-		sed -i '' -E -e 's|24.24.24.24|'$PASSWD'|g' config.xml
+		if [ $PASS ]; then
+			echo "PASS variable set, proceeding"
+			sed -i '' -E -e 's|24.24.24.24|'$PASSWD'|g' config.xml
+		else
+			echo "PASS variable is empty, exiting"
+			exit 1
+		fi
 		cp -f config.xml /usr/local/etc/config.xml
 		#Dowload OPNSense Bootstrap and Permit Root Remote Login
-		fetch https://raw.githubusercontent.com/opnsense/update/master/src/bootstrap/opnsense-bootstrap.sh.in;
+		fetch https://raw.githubusercontent.com/opnsense/update/master/src/bootstrap/opnsense-bootstrap.sh.in > /dev/null 2>&1
 		sed -i "" 's/#PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config;
 		#OPNSense
 		sed -i "" "s/reboot/shutdown -r +1/g" opnsense-bootstrap.sh.in;
 		
+		echo "Starting OpnSense installation"
 		sh opnsense-bootstrap.sh.in -y -r ${2};
-
-		#Adds support to LB probe from IP 168.63.129.16
-		fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/lb-conf.sh > /dev/null 2>&1
-		sh ./lb-conf.sh
-		rm -rf hash
-		shutdown -r +1
+		
+		echo "Checking if /conf/config.xml file exists"
+		if [ -f /conf/config.xml ]; then
+			#Adds support to LB probe from IP 168.63.129.16
+			fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/lb-conf.sh > /dev/null 2>&1
+			sh ./lb-conf.sh
+			rm -rf hash
+			shutdown -r +1
+		else
+			echo "OpnSense installation failed, exiting"
+			exit 1
+		fi
 	else
 		echo "PASSWD variable haven't been set"
 		exit 1
