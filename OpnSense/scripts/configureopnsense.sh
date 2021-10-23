@@ -30,16 +30,18 @@ if [ -f $1 ]; then
 	# 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
 	# 2. Install bash to support Azure Backup integration
 	
-	if ( grep "IGNORE_OSVERSION" /etc/csh.cshrc );  then
+	if [ grep "IGNORE_OSVERSION" /etc/csh.cshrc ];  then
 		echo "IGNORE_OSVERSION is already added"
 	else
-		echo "setenv IGNORE_OSVERSION yes" >> /etc/csh.cshrc;
+		echo "IGNORE_OSVERSION variable does not exist, adding"
+		echo "setenv IGNORE_OSVERSION yes" >> /etc/csh.cshrc
 	fi
 	
-	if ( grep "ASSUME_ALWAYS_YES" /etc/csh.cshrc );  then
+	if [ grep "ASSUME_ALWAYS_YES" /etc/csh.cshrc ];  then
 		echo "ASSUME_ALWAYS_YES is already added"
 	else
-		echo "setenv ASSUME_ALWAYS_YES yes" >> /etc/csh.cshrc;
+		echo "ASSUME_ALWAYS_YES variable does not exist, adding"
+		echo "setenv ASSUME_ALWAYS_YES yes" >> /etc/csh.cshrc
 	fi
 	
 	pkg bootstrap -f; pkg update -f;
