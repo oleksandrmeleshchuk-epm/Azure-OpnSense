@@ -79,10 +79,10 @@ if [ -f $1 ]; then
 			exit 1
 		fi
 	else
-		echo "PASSWD variable haven't been set"
+		echo "Hash file does not exist, exiting"
 		exit 1
 	fi
 else
-	echo "$1 file does not exist"
+	echo "$1 file does not exist, exiting"
 	exit 1
 fi
