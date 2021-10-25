@@ -176,9 +176,9 @@
                 }
 			},
 			"plan": {
-                "name": "13_0-release",
+                "name": "12_2-release",
                 "publisher": "thefreebsdfoundation",
-                "product": "freebsd-13_0"
+                "product": "freebsd-12_2"
             }
 		},
 		{
