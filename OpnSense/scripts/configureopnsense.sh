@@ -37,27 +37,14 @@ if [ -f $1 ]; then
 		echo "setenv IGNORE_OSVERSION yes" >> /etc/csh.cshrc
 	fi
 	
-	if grep -q ASSUME_ALWAYS_YES /etc/csh.cshrc; then
-		echo "ASSUME_ALWAYS_YES is already added"
-	else
-		echo "ASSUME_ALWAYS_YES variable does not exist, adding"
-		echo "setenv ASSUME_ALWAYS_YES yes" >> /etc/csh.cshrc
-	fi
-	
 	if grep -q IGNORE_OSVERSION /etc/csh.cshrc; then
 		echo "IGNORE_OSVERSION has been successfully added"
 	else
 		echo "IGNORE_OSVERSION has not been added"
 	fi
 	
-	if grep -q ASSUME_ALWAYS_YES /etc/csh.cshrc; then
-		echo "ASSUME_ALWAYS_YES has been successfully added"
-	else
-		echo "ASSUME_ALWAYS_YES has not been added"
-	fi
-	
-	pkg bootstrap -f && pkg upgrade -fy;
-	pkg install ca_root_nss && pkg install -y bash;
+	pkg bootstrap -f; pkg update -f
+	env ASSUME_ALWAYS_YES=YES pkg install ca_root_nss && pkg install -y bash 
 	
 	if ! pkg info jq ; then
 		pkg install -y jq;

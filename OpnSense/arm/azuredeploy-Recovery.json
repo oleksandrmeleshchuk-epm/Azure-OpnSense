@@ -178,10 +178,10 @@
 				},
 				"storageProfile": {
 					"imageReference": {
-						"publisher": "MicrosoftOSTC",
-						"offer": "FreeBSD",
-						"sku": "12.0",
-						"version": "latest"
+                        "publisher": "thefreebsdfoundation",
+                        "offer": "freebsd-12_2",
+                        "sku": "12_2-release",
+                        "version": "latest"
 					},
 					"osDisk": {
 						"createOption": "FromImage",
@@ -204,8 +204,19 @@
 							"id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic2'))]"
 						}
 					]
-				}
-			}
+				},
+				"diagnosticsProfile": {
+                    "bootDiagnostics": {
+					"enabled": true,
+					"storageUri": "[concat('https://', variables('diagnosticsStorageAccountName'), '.blob.core.windows.net/')]"
+                    }
+                }
+			},
+			"plan": {
+                "name": "12_2-release",
+                "publisher": "thefreebsdfoundation",
+                "product": "freebsd-12_2"
+            }
 		},
 		{
 			"type": "Microsoft.Compute/virtualMachines/extensions",
