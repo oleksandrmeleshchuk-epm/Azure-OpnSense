@@ -56,19 +56,19 @@ if [ -f $1 ]; then
 		echo "ASSUME_ALWAYS_YES has not been added"
 	fi
 	
-	pkg bootstrap -f; pkg update -f;
+	pkg bootstrap -f && pkg upgrade -fy;
 	pkg install ca_root_nss && pkg install -y bash;
 	
-	if [ ! pkg info jq ] ; then
+	if ! pkg info jq ; then
 		pkg install -y jq;
-		if [ ! pkg info jq ] ; then
+		if ! pkg info jq ; then
 			echo "Package jq missing, exiting. Please check package availability"
 		fi
 	fi
 	
-	if [ ! pkg info curl ] ; then
+	if ! pkg info curl ; then
 		pkg install -y curl;
-		if [ ! pkg info curl ] ; then
+		if ! pkg info curl ; then
 			echo "Package curl missing, exiting. Please check package availability"
 		fi
 	fi
