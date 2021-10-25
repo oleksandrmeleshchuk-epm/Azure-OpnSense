@@ -86,6 +86,7 @@
 		"PeeringNetwork2SubID": "37563f69-f5ca-443e-a71f-df1a7acb739f",
 		"extensionName":"CustomScript",
 		"RGName": "[toLower(resourceGroup().name)]",
+		"diagnosticsStorageAccountName": "nmrktlogandmondev",
 		"virtualNetworkName": "[concat(variables('RGName'), '-vnet')]",
 		"PeeringNetworkName1": "[variables('PeeringNetwork1Name')]",
 		"SubIDPeeringNetworkName1": "[variables('PeeringNetwork1SubID')]",
@@ -122,7 +123,7 @@
 		{
 			"name": "[variables('virtualMachineName')]",
 			"type": "Microsoft.Compute/virtualMachines",
-			"apiVersion": "2017-03-30",
+			"apiVersion": "2021-03-01",
 			"location": "[variables('location')]",
 			"comments": "This is the virtual machine that you're building.",
 			"dependsOn": [
@@ -140,11 +141,11 @@
 				},
 				"storageProfile": {
 					"imageReference": {
-						"publisher": "MicrosoftOSTC",
-						"offer": "FreeBSD",
-						"sku": "12.0",
-						"version": "latest"
-					},
+                        "publisher": "thefreebsdfoundation",
+                        "offer": "freebsd-13_0",
+                        "sku": "13_0-release",
+                        "version": "latest"
+                    },
 					"osDisk": {
 						"createOption": "FromImage",
 						"name": "[concat(variables('virtualMachineName'), '-disk')]"
@@ -166,8 +167,19 @@
 							"id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic2'))]"
 						}
 					]
-				}
-			}
+				},
+				"diagnosticsProfile": {
+                    "bootDiagnostics": {
+					"enabled": true,
+					"storageUri": "[concat('https://', variables('diagnosticsStorageAccountName'), '.blob.core.windows.net/')]"
+                    }
+                }
+			},
+			"plan": {
+                "name": "13_0-release",
+                "publisher": "thefreebsdfoundation",
+                "product": "freebsd-13_0"
+            }
 		},
 		{
 			"type": "Microsoft.Network/routeTables",
