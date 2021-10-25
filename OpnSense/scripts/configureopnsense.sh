@@ -69,8 +69,7 @@ if [ -f $1 ]; then
 	
 	if [ -s ./hash ]; then
 		echo "Hash file exists, proceeding"
-		env PASSWD=`cat "./hash"`
-		if [ $PASSWD ]; then
+		if [ env PASSWD=`cat "./hash"` $PASSWD ]; then
 			echo "PASSWD variable set, proceeding"
 			sed -i '' -E -e 's|24.24.24.24|'$PASSWD'|g' config.xml;
 		else
