@@ -43,7 +43,7 @@ if [ -f $1 ]; then
 		echo "IGNORE_OSVERSION has not been added"
 	fi
 	
-	pkg bootstrap -f; pkg update -f
+	env ASSUME_ALWAYS_YES=YES pkg bootstrap -f; pkg update -f
 	env ASSUME_ALWAYS_YES=YES pkg install ca_root_nss && pkg install -y bash 
 	
 	if ! pkg info jq ; then
@@ -69,12 +69,12 @@ if [ -f $1 ]; then
 	
 	if [ -s ./hash ]; then
 		echo "Hash file exists, proceeding"
-		PASSWD=`cat "./hash"`
-		if [ $PASS ]; then
-			echo "PASS variable set, proceeding"
+		setenv PASSWD `cat "./hash"`
+		if [ $PASSWD ]; then
+			echo "PASSWD variable set, proceeding"
 			sed -i '' -E -e 's|24.24.24.24|'$PASSWD'|g' config.xml;
 		else
-			echo "PASS variable is empty, exiting"
+			echo "PASSWD variable is empty, exiting"
 			exit 1
 		fi
 		cp -f config.xml /usr/local/etc/config.xml
