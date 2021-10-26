@@ -93,9 +93,10 @@
 	},
 	"variables": {
 		"TempUsername": "devops",
-		"TempPassword": "[concat('P', uniqueString(subscription().subscriptionId), '!')]",
+        "TempPassword": "[concat('P', uniqueString(deployment().name), '!')]",
 		"extensionName":"CustomScript",
 		"RGName": "[toLower(resourceGroup().name)]",
+		"diagnosticsStorageAccountName": "nmrktlogandmondev",
 		"virtualNetworkName": "[concat(variables('RGName'), '-vnet')]",
 		"virtualMachineName": "[concat(variables('RGName'), '-fw', parameters('NewVirtualMachineNumber'))]",
 		"OldVirtualMachineName": "[concat(variables('RGName'), '-fw', parameters('OldVirtualMachineNumber'))]",
@@ -116,52 +117,6 @@
 	},
 	"resources": [
 		{
-			"type": "Microsoft.Network/virtualNetworks",
-			"name": "[variables('virtualNetworkName')]",
-			"apiVersion": "2017-06-01",
-			"location": "[variables('location')]",
-			"comments": "This will build a Virtual Network.",
-			"properties": {
-				"addressSpace": {
-					"addressPrefixes": [
-						"[variables('subnetAddressSpace')]"
-					]
-				},
-				"subnets": [
-					{
-						"name": "[variables('subnet1Name')]",
-						"properties": {
-							"addressPrefix": "[variables('subnetGatewaySubnet')]"
-						}
-					},
-					{
-						"name": "[variables('subnet2Name')]",
-						"properties": {
-							"addressPrefix": "[variables('subnetfirewall-frontend')]"
-						}
-					},
-					{
-						"name": "[variables('subnet3Name')]",
-						"properties": {
-							"addressPrefix": "[variables('subnetmanagement')]",
-							"networkSecurityGroup": {
-								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
-							}
-						}
-					},
-					{
-						"name": "[variables('subnet4Name')]",
-						"properties": {
-							"addressPrefix": "[variables('subnetfirewall-backend')]",
-							"networkSecurityGroup": {
-								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
-							}
-						}
-					}
-				]
-			}
-		},
-		{
 			"name": "[variables('virtualMachineName')]",
 			"type": "Microsoft.Compute/virtualMachines",
 			"apiVersion": "2017-03-30",
@@ -178,10 +133,10 @@
 				},
 				"storageProfile": {
 					"imageReference": {
-                        "publisher": "thefreebsdfoundation",
-                        "offer": "freebsd-12_2",
-                        "sku": "12_2-release",
-                        "version": "latest"
+						"publisher": "MicrosoftOSTC",
+						"offer": "FreeBSD",
+						"sku": "12.0",
+						"version": "latest"
 					},
 					"osDisk": {
 						"createOption": "FromImage",
@@ -211,12 +166,7 @@
 					"storageUri": "[concat('https://', variables('diagnosticsStorageAccountName'), '.blob.core.windows.net/')]"
                     }
                 }
-			},
-			"plan": {
-                "name": "12_2-release",
-                "publisher": "thefreebsdfoundation",
-                "product": "freebsd-12_2"
-            }
+			}
 		},
 		{
 			"type": "Microsoft.Compute/virtualMachines/extensions",
@@ -237,58 +187,6 @@
 					],
 					"commandToExecute": "[concat('sh ',parameters('ShellScriptName'),' ',parameters('OPNConfigFile'),' ',variables('RGName'),' ',parameters('BackupRepo'),' ',parameters('GitOrg'),' ',parameters('PAT'),' ',parameters('OpnSenseVersion'))]"
 				}             
-			}
-		},
-		{
-			"type": "Microsoft.Network/virtualNetworks",
-			"name": "[variables('virtualNetworkName')]",
-			"apiVersion": "2017-06-01",
-			"location": "[variables('location')]",
-			"comments": "This will build a Virtual Network.",
-			"properties": {
-				"addressSpace": {
-					"addressPrefixes": [
-						"[variables('subnetAddressSpace')]"
-					]
-				},
-				"subnets": [
-					{
-						"name": "[variables('subnet1Name')]",
-						"properties": {
-							"addressPrefix": "[variables('subnetGatewaySubnet')]"
-						}
-					},
-					{
-						"name": "[variables('subnet2Name')]",
-						"properties": {
-							"addressPrefix": "[variables('subnetfirewall-frontend')]"
-						}
-					},
-					{
-						"name": "[variables('subnet3Name')]",
-						"properties": {
-							"addressPrefix": "[variables('subnetmanagement')]",
-							"networkSecurityGroup": {
-								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
-							},
-							"routeTable": {
-                                "id": "[resourceId('Microsoft.Network/routeTables', variables('routeTableName'))]"
-                            }
-						}
-					},
-					{
-						"name": "[variables('subnet4Name')]",
-						"properties": {
-							"addressPrefix": "[variables('subnetfirewall-backend')]",
-							"networkSecurityGroup": {
-								"id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
-							},
-							"routeTable": {
-                                "id": "[resourceId('Microsoft.Network/routeTables', variables('routeTableName'))]"
-                            }
-						}
-					}
-				]
 			}
 		}
 	],

@@ -75,7 +75,7 @@
 	"variables": {
 		"OpnScriptURI": "https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/",
 		"TempUsername": "devops",
-		"TempPassword": "[concat('P', uniqueString(deployment().name), '!')]",
+        "TempPassword": "[concat('P', uniqueString(deployment().name), '!')]",
 		"ShellScriptName": "configureopnsense.sh",
 		"OpnConfigFile": "config.xml",
 		"PeeringNetwork1Name": "abbne-nmarket-jenkins-vnet",
@@ -141,10 +141,10 @@
 				},
 				"storageProfile": {
 					"imageReference": {
-                        "publisher": "thefreebsdfoundation",
-                        "offer": "freebsd-12_2",
-                        "sku": "12_2-release",
-                        "version": "latest"
+						"publisher": "MicrosoftOSTC",
+						"offer": "FreeBSD",
+						"sku": "12.0",
+						"version": "latest"
                     },
 					"osDisk": {
 						"createOption": "FromImage",
@@ -174,12 +174,7 @@
 					"storageUri": "[concat('https://', variables('diagnosticsStorageAccountName'), '.blob.core.windows.net/')]"
                     }
                 }
-			},
-			"plan": {
-                "name": "12_2-release",
-                "publisher": "thefreebsdfoundation",
-                "product": "freebsd-12_2"
-            }
+			}
 		},
 		{
 			"type": "Microsoft.Network/routeTables",
