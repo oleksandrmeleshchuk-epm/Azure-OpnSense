@@ -93,11 +93,10 @@ if [ -n "$8" ]; then
 	#OPNSense
 	sed -i "" "s/reboot/shutdown -r +1/g" opnsense-bootstrap.sh.in;
 	
-	echo "Starting OpnSense installation"
-	sh opnsense-bootstrap.sh.in -y -r ${2};
-	
 	echo "Checking if /usr/local/etc/config.xml file exists"
 	if [ -f /usr/local/etc/config.xml ]; then
+		echo "Starting OpnSense installation"
+		sh opnsense-bootstrap.sh.in -y -r ${2};
 		#Adds support to LB probe from IP 168.63.129.16
 		fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/lb-conf.sh > /dev/null 2>&1
 		sh ./lb-conf.sh
