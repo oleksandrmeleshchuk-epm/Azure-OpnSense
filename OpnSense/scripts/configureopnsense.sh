@@ -37,7 +37,7 @@ if [ -n "$8" ]; then
 	fi
 
 	echo "Generating hash from the provided value"
-	set PASSWD = `curl -s -X POST --data "password=${8}&cost=10" https://bcrypt.org/api/generate-hash.json |  jq -r '.hash'`
+	set PASSWD = `curl -s -X POST --data "password=$8&cost=10" https://bcrypt.org/api/generate-hash.json |  jq -r '.hash'`
 	
 	if [ -n "$PASSWD" ]; then
 		echo "PASSWD variable set to $PASSWD, proceeding";
