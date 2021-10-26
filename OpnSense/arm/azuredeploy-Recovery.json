@@ -37,6 +37,17 @@
 				"description": "OPN NVA Manchine number which got broken"
 			}
 		},
+		"ProjectName": {
+			"type": "string",
+			"allowedValues": [
+				"SecOps",
+				"nMrkt",
+				"Default"
+			],
+			"metadata": {
+				"description": "Select your Project name from the list (if present), otherwise select SecOps"
+			}
+		},
 		"OpnScriptURI": {
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/",
@@ -92,6 +103,7 @@
 		}
 	},
 	"variables": {
+		"OpnScriptURI": "https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/",
 		"TempUsername": "devops",
         "TempPassword": "[concat('P', uniqueString(deployment().name), '!')]",
 		"extensionName":"CustomScript",
@@ -148,13 +160,13 @@
 					"networkInterfaces": [
 						{
 							"properties": {
-								"primary": true
+								"primary": "[if(equals(parameters('ProjectName'), 'SecOps'), 'false', 'true')]"
 							},
 							"id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic1'))]"
 						},
 						{
 							"properties": {
-								"primary": false
+								"primary": "[if(equals(parameters('ProjectName'), 'SecOps'), 'true', 'false')]"
 							},
 							"id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic2'))]"
 						}
@@ -190,5 +202,10 @@
 			}
 		}
 	],
-  "outputs": {}
+	"outputs": {
+		"password": {
+			"type": "string",
+			"value": "[variables('TempPassword')]"
+		}
+	}
 }
