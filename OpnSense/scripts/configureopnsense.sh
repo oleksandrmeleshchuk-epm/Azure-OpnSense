@@ -1,32 +1,9 @@
 #!/bin/sh
 #OPNSense default configuration template
 echo "Will be tryinig to install OpnSense release ${2}";
-fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/${1} > /dev/null 2>&1
 
-if [ -f $1 ]; then
-	sed -i '' -E -e 's/1.1.1.1/'10.${4}.${5}.7'/g' config.xml;
-	sed -i '' -E -e 's/2.2.2.2/'27'/g' config.xml;
-	sed -i '' -E -e 's/3.3.3.3/'10.${4}.${5}.39'/g' config.xml;
-	sed -i '' -E -e 's/4.4.4.4/'27'/g' config.xml;
-	sed -i '' -E -e 's/5.5.5.5/'10.${4}.${5}.33'/g' config.xml;
-	sed -i '' -E -e 's/6.6.6.6/'10.${4}.${5}.1'/g' config.xml;
-	sed -i '' -E -e 's/7.7.7.7/'10.${4}.${5}.32'/g' config.xml;
-	sed -i '' -E -e 's/9.9.9.9/'27'/g' config.xml;
-	sed -i '' -E -e 's/10.10.10.10/'10.${4}.${5}.64'/g' config.xml;
-	sed -i '' -E -e 's/11.11.11.11/'26'/g' config.xml;
-	sed -i '' -E -e 's/12.12.12.12/'10.${4}.${5}.9'/g' config.xml;
-	sed -i '' -E -e 's/13.13.13.13/'10.${4}.${5}.11'/g' config.xml;
-	sed -i '' -E -e 's/14.14.14.14/'172.31.${4}.0'/g' config.xml;
-	sed -i '' -E -e 's/15.15.15.15/'24'/g' config.xml;
-	sed -i '' -E -e 's/16.16.16.16/'10.${4}.${5}.0'/g' config.xml;
-	sed -i '' -E -e 's/17.17.17.17/'24'/g' config.xml;
-	sed -i '' -E -e 's/18.18.18.18/'10.${4}.${5}.128'/g' config.xml;
-	sed -i '' -E -e 's/19.19.19.19/'26'/g' config.xml;
-	sed -i '' -E -e 's/20.20.20.20/'172.17.${4}.0'/g' config.xml;
-	sed -i '' -E -e 's/21.21.21.21/'24'/g' config.xml;
-	sed -i '' -E -e 's/22.22.22.22/'${7}'/g' config.xml;
-	sed -i '' -E -e 's/23.23.23.23/'${6}'/g' config.xml;
 
+if [ -n "$8" ]; then
 	# 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
 	# 2. Install bash to support Azure Backup integration
 	
@@ -61,21 +38,42 @@ if [ -f $1 ]; then
 			exit 1
 		fi
 	fi
-	
+
 	echo "Generating hash from the provided value"
 	curl -s -X POST --data "password=${8}&cost=10" https://bcrypt.org/api/generate-hash.json |  jq -r '.hash' > ./hash;
-	
-	cat ./hash;
-	
+
 	if [ -s ./hash ]; then
 		echo "Hash file exists, proceeding"
 		if [ env PASSWD=`cat "./hash"` $PASSWD ]; then
 			echo "PASSWD variable set, proceeding"
+			fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/${1} > /dev/null 2>&1
 			sed -i '' -E -e 's|24.24.24.24|'$PASSWD'|g' config.xml;
 		else
-			echo "PASSWD variable is empty, exiting"
-			exit 1
+			echo "PASSWD variable is empty, using config.defpass.xml"
+			fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/config.defpass.xml > /dev/null 2>&1
 		fi
+		sed -i '' -E -e 's/1.1.1.1/'10.${4}.${5}.7'/g' config.xml;
+		sed -i '' -E -e 's/2.2.2.2/'27'/g' config.xml;
+		sed -i '' -E -e 's/3.3.3.3/'10.${4}.${5}.39'/g' config.xml;
+		sed -i '' -E -e 's/4.4.4.4/'27'/g' config.xml;
+		sed -i '' -E -e 's/5.5.5.5/'10.${4}.${5}.33'/g' config.xml;
+		sed -i '' -E -e 's/6.6.6.6/'10.${4}.${5}.1'/g' config.xml;
+		sed -i '' -E -e 's/7.7.7.7/'10.${4}.${5}.32'/g' config.xml;
+		sed -i '' -E -e 's/9.9.9.9/'27'/g' config.xml;
+		sed -i '' -E -e 's/10.10.10.10/'10.${4}.${5}.64'/g' config.xml;
+		sed -i '' -E -e 's/11.11.11.11/'26'/g' config.xml;
+		sed -i '' -E -e 's/12.12.12.12/'10.${4}.${5}.9'/g' config.xml;
+		sed -i '' -E -e 's/13.13.13.13/'10.${4}.${5}.11'/g' config.xml;
+		sed -i '' -E -e 's/14.14.14.14/'172.31.${4}.0'/g' config.xml;
+		sed -i '' -E -e 's/15.15.15.15/'24'/g' config.xml;
+		sed -i '' -E -e 's/16.16.16.16/'10.${4}.${5}.0'/g' config.xml;
+		sed -i '' -E -e 's/17.17.17.17/'24'/g' config.xml;
+		sed -i '' -E -e 's/18.18.18.18/'10.${4}.${5}.128'/g' config.xml;
+		sed -i '' -E -e 's/19.19.19.19/'26'/g' config.xml;
+		sed -i '' -E -e 's/20.20.20.20/'172.17.${4}.0'/g' config.xml;
+		sed -i '' -E -e 's/21.21.21.21/'24'/g' config.xml;
+		sed -i '' -E -e 's/22.22.22.22/'${7}'/g' config.xml;
+		sed -i '' -E -e 's/23.23.23.23/'${6}'/g' config.xml;
 		cp -f config.xml /usr/local/etc/config.xml
 		#Dowload OPNSense Bootstrap and Permit Root Remote Login
 		fetch https://raw.githubusercontent.com/opnsense/update/master/src/bootstrap/opnsense-bootstrap.sh.in > /dev/null 2>&1
