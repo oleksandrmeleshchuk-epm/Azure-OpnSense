@@ -2,7 +2,6 @@
 #OPNSense default configuration template
 echo "Will be tryinig to install OpnSense release ${2}";
 
-
 if [ -n "$8" ]; then
 	# 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
 	# 2. Install bash to support Azure Backup integration
@@ -87,8 +86,8 @@ if [ -n "$8" ]; then
 		echo "Starting OpnSense installation"
 		sh opnsense-bootstrap.sh.in -y -r ${2};
 		
-		echo "Checking if /conf/config.xml file exists"
-		if [ -f /conf/config.xml ]; then
+		echo "Checking if /usr/local/etc/config.xml file exists"
+		if [ -f /usr/local/etc/config.xml ]; then
 			#Adds support to LB probe from IP 168.63.129.16
 			fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/lb-conf.sh > /dev/null 2>&1
 			sh ./lb-conf.sh
