@@ -37,7 +37,7 @@ if [ -n "$8" ]; then
 	fi
 
 	echo "Generating hash from the provided value"
-	set -o pipefail # if supported by your shell
+	#set -o pipefail # if supported by your shell
 	PASSWD=$(curl -s -X POST --data "password=${8}&cost=10" https://bcrypt.org/api/generate-hash.json |  jq -r '.hash') || exit
 	
 	if [ -n "$PASSWD" ]; then
