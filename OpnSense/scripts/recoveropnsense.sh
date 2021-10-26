@@ -24,7 +24,7 @@ if [ -n "$6" ]; then
 			exit 1
 		fi
 	fi	
-	curl -H 'Authorization: token "${5}"' -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/${4}/${3}/contents/${1}?ref=${2} --output $1
+	curl -H "Authorization: token ${5}" -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/${4}/${3}/contents/${1}?ref=${2} --output $1
 	cp $1 /usr/local/etc/config.xml
 
 	#Dowload OPNSense Bootstrap and Permit Root Remote Login
