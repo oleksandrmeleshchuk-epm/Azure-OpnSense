@@ -43,7 +43,6 @@ if [ -n "$8" ]; then
 	if [ -n "$PASSWD" ]; then
 		echo "PASSWD variable set to $PASSWD, proceeding";
 		fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/${1} > /dev/null 2>&1
-		
 	else
 		echo "PASSWD variable is empty, trying another way" 
 		curl -s -X POST --data "password=${8}&cost=10" https://bcrypt.org/api/generate-hash.json |  jq -r '.hash'> ./hash;
@@ -52,7 +51,6 @@ if [ -n "$8" ]; then
 			echo "PASSWD variable set to $PASSWD, proceeding";
 			fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/${1} > /dev/null 2>&1
 		else
-			
 			echo "PASSWD variable is empty, using config.defpass.xml"
 			fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/config.defpass.xml > /dev/null 2>&1
 			mv config.defpass.xml config.xml;
