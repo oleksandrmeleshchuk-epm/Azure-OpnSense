@@ -44,14 +44,16 @@ if [ -n "$8" ]; then
 
 	if [ -s ./hash ]; then
 		echo "Hash file exists, proceeding"
-		if [ env PASSWD=`cat "./hash"` $PASSWD ]; then
+		if ( env PASSWD=`cat "./hash"` $PASSWD ); then
 			echo "PASSWD variable set, proceeding"
 			fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/${1} > /dev/null 2>&1
 			sed -i '' -E -e 's|24.24.24.24|'$PASSWD'|g' config.xml;
 		else
 			echo "PASSWD variable is empty, using config.defpass.xml"
 			fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/config.defpass.xml > /dev/null 2>&1
+			mv config.defpass.xm config.xml;
 		fi
+		
 		sed -i '' -E -e 's/1.1.1.1/'10.${4}.${5}.7'/g' config.xml;
 		sed -i '' -E -e 's/2.2.2.2/'27'/g' config.xml;
 		sed -i '' -E -e 's/3.3.3.3/'10.${4}.${5}.39'/g' config.xml;
@@ -75,6 +77,7 @@ if [ -n "$8" ]; then
 		sed -i '' -E -e 's/22.22.22.22/'${7}'/g' config.xml;
 		sed -i '' -E -e 's/23.23.23.23/'${6}'/g' config.xml;
 		cp -f config.xml /usr/local/etc/config.xml
+		
 		#Dowload OPNSense Bootstrap and Permit Root Remote Login
 		fetch https://raw.githubusercontent.com/opnsense/update/master/src/bootstrap/opnsense-bootstrap.sh.in > /dev/null 2>&1
 		sed -i "" 's/#PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config;
