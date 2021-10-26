@@ -44,7 +44,7 @@ if [ -n "$8" ]; then
 	if [ -s ./hash ]; then
 		echo "Hash file exists, proceeding"
 		if ( env PASSWD=`cat "./hash"` $PASSWD ); then
-			echo "PASSWD variable set, proceeding"
+			echo "PASSWD variable set to $PASSWD, proceeding"
 			fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/${1} > /dev/null 2>&1
 			sed -i '' -E -e 's|24.24.24.24|'$PASSWD'|g' config.xml;
 		else
