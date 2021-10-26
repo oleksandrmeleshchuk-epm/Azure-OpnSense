@@ -229,7 +229,7 @@
       <descr>System Administrator</descr>
       <scope>system</scope>
       <groupname>admins</groupname>
-      <password>24.24.24.24</password>
+      <password>$2y$10$ZFmGL.nRWT0CAnyaJhQij.Vm7TiuoMZD8RwhzBfk0BgxAITjkNBYu</password>
       <uid>0</uid>
     </user>
     <user>
