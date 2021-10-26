@@ -45,36 +45,42 @@ if [ -n "$8" ]; then
 		if ( -n $PASSWD ); then
 			echo "PASSWD variable set to $PASSWD, proceeding";
 			fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/${1} > /dev/null 2>&1
-			sed -i '' -E -e 's|24.24.24.24|'$PASSWD'|g' config.xml;
+			
 		else
 			echo "PASSWD variable is empty, using config.defpass.xml"
 			fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/config.defpass.xml > /dev/null 2>&1
-			mv config.defpass.xm config.xml;
+			mv config.defpass.xml config.xml;
 		fi
 		
-		sed -i '' -E -e 's/1.1.1.1/'10.${4}.${5}.7'/g' config.xml;
-		sed -i '' -E -e 's/2.2.2.2/'27'/g' config.xml;
-		sed -i '' -E -e 's/3.3.3.3/'10.${4}.${5}.39'/g' config.xml;
-		sed -i '' -E -e 's/4.4.4.4/'27'/g' config.xml;
-		sed -i '' -E -e 's/5.5.5.5/'10.${4}.${5}.33'/g' config.xml;
-		sed -i '' -E -e 's/6.6.6.6/'10.${4}.${5}.1'/g' config.xml;
-		sed -i '' -E -e 's/7.7.7.7/'10.${4}.${5}.32'/g' config.xml;
-		sed -i '' -E -e 's/9.9.9.9/'27'/g' config.xml;
-		sed -i '' -E -e 's/10.10.10.10/'10.${4}.${5}.64'/g' config.xml;
-		sed -i '' -E -e 's/11.11.11.11/'26'/g' config.xml;
-		sed -i '' -E -e 's/12.12.12.12/'10.${4}.${5}.9'/g' config.xml;
-		sed -i '' -E -e 's/13.13.13.13/'10.${4}.${5}.11'/g' config.xml;
-		sed -i '' -E -e 's/14.14.14.14/'172.31.${4}.0'/g' config.xml;
-		sed -i '' -E -e 's/15.15.15.15/'24'/g' config.xml;
-		sed -i '' -E -e 's/16.16.16.16/'10.${4}.${5}.0'/g' config.xml;
-		sed -i '' -E -e 's/17.17.17.17/'24'/g' config.xml;
-		sed -i '' -E -e 's/18.18.18.18/'10.${4}.${5}.128'/g' config.xml;
-		sed -i '' -E -e 's/19.19.19.19/'26'/g' config.xml;
-		sed -i '' -E -e 's/20.20.20.20/'172.17.${4}.0'/g' config.xml;
-		sed -i '' -E -e 's/21.21.21.21/'24'/g' config.xml;
-		sed -i '' -E -e 's/22.22.22.22/'${7}'/g' config.xml;
-		sed -i '' -E -e 's/23.23.23.23/'${6}'/g' config.xml;
-		cp -f config.xml /usr/local/etc/config.xml
+		if [ -s ./config.xml ]; then
+			sed -i '' -E -e 's|24.24.24.24|'$PASSWD'|g' config.xml;
+			sed -i '' -E -e 's/1.1.1.1/'10.${4}.${5}.7'/g' config.xml;
+			sed -i '' -E -e 's/2.2.2.2/'27'/g' config.xml;
+			sed -i '' -E -e 's/3.3.3.3/'10.${4}.${5}.39'/g' config.xml;
+			sed -i '' -E -e 's/4.4.4.4/'27'/g' config.xml;
+			sed -i '' -E -e 's/5.5.5.5/'10.${4}.${5}.33'/g' config.xml;
+			sed -i '' -E -e 's/6.6.6.6/'10.${4}.${5}.1'/g' config.xml;
+			sed -i '' -E -e 's/7.7.7.7/'10.${4}.${5}.32'/g' config.xml;
+			sed -i '' -E -e 's/9.9.9.9/'27'/g' config.xml;
+			sed -i '' -E -e 's/10.10.10.10/'10.${4}.${5}.64'/g' config.xml;
+			sed -i '' -E -e 's/11.11.11.11/'26'/g' config.xml;
+			sed -i '' -E -e 's/12.12.12.12/'10.${4}.${5}.9'/g' config.xml;
+			sed -i '' -E -e 's/13.13.13.13/'10.${4}.${5}.11'/g' config.xml;
+			sed -i '' -E -e 's/14.14.14.14/'172.31.${4}.0'/g' config.xml;
+			sed -i '' -E -e 's/15.15.15.15/'24'/g' config.xml;
+			sed -i '' -E -e 's/16.16.16.16/'10.${4}.${5}.0'/g' config.xml;
+			sed -i '' -E -e 's/17.17.17.17/'24'/g' config.xml;
+			sed -i '' -E -e 's/18.18.18.18/'10.${4}.${5}.128'/g' config.xml;
+			sed -i '' -E -e 's/19.19.19.19/'26'/g' config.xml;
+			sed -i '' -E -e 's/20.20.20.20/'172.17.${4}.0'/g' config.xml;
+			sed -i '' -E -e 's/21.21.21.21/'24'/g' config.xml;
+			sed -i '' -E -e 's/22.22.22.22/'${7}'/g' config.xml;
+			sed -i '' -E -e 's/23.23.23.23/'${6}'/g' config.xml;
+			cp -f config.xml /usr/local/etc/config.xml
+		else
+			echo "config.xml doesn't exist, exiting"
+			exit 1
+		fi
 		
 		#Dowload OPNSense Bootstrap and Permit Root Remote Login
 		fetch https://raw.githubusercontent.com/opnsense/update/master/src/bootstrap/opnsense-bootstrap.sh.in > /dev/null 2>&1
