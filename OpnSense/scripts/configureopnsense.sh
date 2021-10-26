@@ -3,9 +3,6 @@
 echo "Will be tryinig to install OpnSense release ${2}";
 
 if [ -n "$8" ]; then
-	# 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
-	# 2. Install bash to support Azure Backup integration
-	
 	if grep -q IGNORE_OSVERSION /etc/csh.cshrc; then
 		echo "IGNORE_OSVERSION is already added"
 	else
@@ -18,7 +15,8 @@ if [ -n "$8" ]; then
 	else
 		echo "IGNORE_OSVERSION has not been added"
 	fi
-	
+	# 1. Package to get root certificate bundle from the Mozilla Project (FreeBSD)
+	# 2. Install bash to support Azure Backup integration
 	env ASSUME_ALWAYS_YES=YES pkg bootstrap -f; pkg update -f
 	env ASSUME_ALWAYS_YES=YES pkg install ca_root_nss && pkg install -y bash 
 	
@@ -43,8 +41,9 @@ if [ -n "$8" ]; then
 
 	if [ -s ./hash ]; then
 		echo "Hash file exists, proceeding"
-		if ( env PASSWD=`cat "./hash"` $PASSWD ); then
-			echo "PASSWD variable set to $PASSWD, proceeding"
+		env PASSWD=`cat "./hash"`
+		if ( -n $PASSWD ); then
+			echo "PASSWD variable set to $PASSWD, proceeding";
 			fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/${1} > /dev/null 2>&1
 			sed -i '' -E -e 's|24.24.24.24|'$PASSWD'|g' config.xml;
 		else
@@ -102,6 +101,6 @@ if [ -n "$8" ]; then
 		exit 1
 	fi
 else
-	echo "$1 file does not exist, exiting"
+	echo "PASSWD variable have not been set, exiting"
 	exit 1
 fi
