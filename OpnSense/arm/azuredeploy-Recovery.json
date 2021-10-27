@@ -160,13 +160,13 @@
 					"networkInterfaces": [
 						{
 							"properties": {
-								"primary": "[if(equals(parameters('ProjectName'), 'SecOps'), 'false', 'true')]"
+								"primary": "true"
 							},
 							"id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic1'))]"
 						},
 						{
 							"properties": {
-								"primary": "[if(equals(parameters('ProjectName'), 'SecOps'), 'true', 'false')]"
+								"primary": "false"
 							},
 							"id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic2'))]"
 						}
@@ -202,10 +202,5 @@
 			}
 		}
 	],
-	"outputs": {
-		"password": {
-			"type": "string",
-			"value": "[variables('TempPassword')]"
-		}
-	}
+	"outputs": {}
 }
