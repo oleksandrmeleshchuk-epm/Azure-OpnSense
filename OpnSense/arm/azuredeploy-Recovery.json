@@ -67,7 +67,9 @@
 			"defaultValue": "21.7",
 			"allowedValues": [
 				"21.7",
-				"21.10"
+				"21.10",
+				"22.1",
+				"22.7"
 			],
 			"metadata": {
 				"description": "OpnSense Release version"
