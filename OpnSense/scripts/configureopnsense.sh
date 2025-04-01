@@ -36,9 +36,30 @@ if [ -n "$8" ]; then
 		fi
 	fi
 
+	# Add Azure waagent
+	fetch https://github.com/Azure/WALinuxAgent/archive/refs/tags/v${9}.tar.gz
+	tar -xvzf v${9}.tar.gz
+	cd WALinuxAgent-${9}/
+	python3 setup.py install --register-service --lnx-distro=freebsd --force
+	cd ..
+
+	# Fix waagent by replacing configuration settings
+	ln -s /usr/local/bin/python3.11 /usr/local/bin/python
+	##sed -i "" 's/command_interpreter="python"/command_interpreter="python3"/' /etc/rc.d/waagent
+	##sed -i "" 's/#!\/usr\/bin\/env python/#!\/usr\/bin\/env python3/' /usr/local/sbin/waagent
+	sed -i "" 's/ResourceDisk.EnableSwap=y/ResourceDisk.EnableSwap=n/' /etc/waagent.conf
+	fetch $1actions_waagent.conf
+	cp actions_waagent.conf /usr/local/opnsense/service/conf/actions.d
+
+	# Installing bash - This is a requirement for Azure custom Script extension to run
+	pkg install -y bash
+	pkg install -y os-frr
+
 	echo "Generating hash from the provided value"
 	#set -o pipefail # if supported by your shell
-	PASSWD=$(curl -s -X POST --data "password=${8}&cost=10" https://bcrypt.org/api/generate-hash.json |  jq -r '.hash') || exit
+	# PASSWD=$(curl -s -X POST --data "password=${8}&cost=10" https://bcrypt.org/api/generate-hash.json | jq -r '.hash') || exit
+	# New address https://www.toptal.com/developers/bcrypt/
+	PASSWD=$(curl -s -X POST --data "password=${8}&cost=10" https://www.toptal.com/developers/bcrypt/api/generate-hash.json | jq -r '.hash') || exit
 	
 	if [ -n "$PASSWD" ]; then
 		echo "PASSWD variable set to $PASSWD, proceeding";
@@ -93,7 +114,8 @@ if [ -n "$8" ]; then
 	fetch https://raw.githubusercontent.com/opnsense/update/master/src/bootstrap/opnsense-bootstrap.sh.in > /dev/null 2>&1
 	sed -i "" 's/#PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config;
 	#OPNSense
-	sed -i "" "s/reboot/shutdown -r +1/g" opnsense-bootstrap.sh.in;
+	sed -i "" "s/set -e/#set -e/g" opnsense-bootstrap.sh.in
+	sed -i "" "s/reboot/shutdown -r +1/g" opnsense-bootstrap.sh.in	
 	
 	echo "Checking if /usr/local/etc/config.xml file exists"
 	if [ -f /usr/local/etc/config.xml ]; then
@@ -102,6 +124,12 @@ if [ -n "$8" ]; then
 		#Adds support to LB probe from IP 168.63.129.16
 		fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/lb-conf.sh > /dev/null 2>&1
 		sh ./lb-conf.sh
+		# Reset WebGUI certificate
+		echo #\!/bin/sh >> /usr/local/etc/rc.syshook.d/start/94-restartwebgui
+		echo configctl webgui restart renew >> /usr/local/etc/rc.syshook.d/start/94-restartwebgui
+		echo rm /usr/local/etc/rc.syshook.d/start/94-restartwebgui >> /usr/local/etc/rc.syshook.d/start/94-restartwebgui
+		chmod +x /usr/local/etc/rc.syshook.d/start/94-restartwebgui
+		
 		rm -rf hash
 		shutdown -r +1
 	else

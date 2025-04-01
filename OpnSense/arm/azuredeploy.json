@@ -62,7 +62,7 @@
 		},
 		"OpnSenseVersion": {
 			"type": "string",
-			"defaultValue": "21.7",
+			"defaultValue": "25.1",
 			"allowedValues": [
 				"21.7",
 				"22.1",
@@ -75,6 +75,13 @@
 			],
 			"metadata": {
 				"description": "OpnSense Release version"
+			}
+		},
+		"WALinuxVersion": {
+			"type": "string",
+			"defaultValue": "2.12.0.4",
+			"metadata": {
+				"description": "Azure WALinux agent Version"
 			}
 		}
 	},
@@ -148,8 +155,8 @@
 				"storageProfile": {
 					"imageReference": {
 						"publisher": "thefreebsdfoundation",
-						"offer": "freebsd-12_2",
-						"sku": "12_2-release",
+						"offer": "freebsd-14_1",
+						"sku": "14_1-release-amd64-gen2-zfs",
 						"version": "latest"
                     },
 					"osDisk": {
@@ -164,21 +171,21 @@
 							"properties": {
 								"primary": true
 							},
-							"id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic1'))]"
+							"id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic2'))]"
 						},
 						{
 							"properties": {
 								"primary": false
 							},
-							"id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic2'))]"
+							"id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic1'))]"
 						}
 					]
 				}
 			},
 			"plan": {
-				"name": "12_2-release",
-				"publisher": "thefreebsdfoundation",
-				"product": "freebsd-12_2"
+                "name": "14_1-release-amd64-gen2-zfs",
+                "publisher": "thefreebsdfoundation",
+                "product": "freebsd-14_1"
 			}
 		},
 		{
@@ -470,13 +477,13 @@
 			"properties": {
 				"publisher": "Microsoft.OSTCExtensions",
 				"type": "CustomScriptForLinux",
-				"typeHandlerVersion": "1.4",
-				"autoUpgradeMinorVersion": true,
+                "typeHandlerVersion": "1.5",
+                "autoUpgradeMinorVersion": false,
 				"settings": {
 					"fileUris": [
 						"[concat(variables('OPNScriptURI'),variables('ShellScriptName'))]" 
 					],
-					"commandToExecute": "[concat('sh ',variables('ShellScriptName'),' ',variables('OPNConfigFile'),' ',parameters('OpnSenseVersion'),' ',parameters('ProjectName'),' ',parameters('ProjectNetworkCIDROctet'),' ',parameters('NetworkCIDROctet'),' ',variables('RGName'),' ',variables('virtualMachineName'),' ',variables('TempPassword'))]"
+					"commandToExecute": "[concat('sh ',variables('ShellScriptName'),' ',variables('OPNConfigFile'),' ',parameters('OpnSenseVersion'),' ',parameters('ProjectName'),' ',parameters('ProjectNetworkCIDROctet'),' ',parameters('NetworkCIDROctet'),' ',variables('RGName'),' ',variables('virtualMachineName'),' ',variables('TempPassword')' ',parameters('WALinuxVersion'))]"
 				}             
 			}
 		}
