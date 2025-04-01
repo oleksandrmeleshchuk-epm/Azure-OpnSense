@@ -272,17 +272,17 @@
 			"resources":[
 				{
 					"type":"virtualNetworkPeerings",
-					"apiVersion":"2019-09-01",
+					"apiVersion":"2024-05-01",
 					"name": "[concat(variables('virtualNetworkName'), '-to-', variables('PeeringNetworkName1'))]",
 					"location":"[resourceGroup().location]",
 					"dependsOn": [
 						"[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
 					],
 					"properties": {
-						"allowVirtualNetworkAccess": "true",
-						"allowForwardedTraffic": "false",
-						"allowGatewayTransit": "false",
-						"useRemoteGateways": "false",
+						"allowVirtualNetworkAccess": true,
+						"allowForwardedTraffic": false,
+						"allowGatewayTransit": false,
+						"useRemoteGateways": false,
 						"remoteVirtualNetwork": {
 							"id": "[concat('/subscriptions/', variables('SubIDPeeringNetworkName1'), '/resourceGroups/', variables('SubIDPeeringRGName1'), '/providers/Microsoft.Network/virtualNetworks/', variables('PeeringNetworkName1'))]"
 						}
@@ -290,17 +290,17 @@
 				},
 				{
 					"type":"virtualNetworkPeerings",
-					"apiVersion":"2019-09-01",
+					"apiVersion":"2024-05-01",
 					"name": "[concat(variables('virtualNetworkName'), '-to-', variables('PeeringNetworkName2'))]",
 					"location":"[resourceGroup().location]",
 					"dependsOn": [
 						"[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
 					],
 					"properties": {
-						"allowVirtualNetworkAccess": "true",
-						"allowForwardedTraffic": "false",
-						"allowGatewayTransit": "false",
-						"useRemoteGateways": "false",
+						"allowVirtualNetworkAccess": true,
+						"allowForwardedTraffic": false,
+						"allowGatewayTransit": false,
+						"useRemoteGateways": false,
 						"remoteVirtualNetwork": {
 							"id": "[concat('/subscriptions/', variables('SubIDPeeringNetworkName2'), '/resourceGroups/', variables('SubIDPeeringRGName2'), '/providers/Microsoft.Network/virtualNetworks/', variables('PeeringNetworkName2'))]"
 						}
