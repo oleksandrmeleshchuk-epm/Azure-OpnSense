@@ -145,8 +145,8 @@
 				"storageProfile": {
 					"imageReference": {
 						"publisher": "thefreebsdfoundation",
-						"offer": "freebsd-12_4",
-						"sku": "12_4-release",
+						"offer": "freebsd-12_2",
+						"sku": "12_2-release",
 						"version": "latest"
                     },
 					"osDisk": {
@@ -173,9 +173,9 @@
 				}
 			},
 			"plan": {
-				"name": "12_4-release",
+				"name": "12_2-release",
 				"publisher": "thefreebsdfoundation",
-				"product": "freebsd-12_4"
+				"product": "freebsd-12_2"
 			}
 		},
 		{
@@ -465,9 +465,9 @@
 				"[concat('Microsoft.Compute/virtualMachines/', variables('virtualMachineName'))]"
 			],
 			"properties": {
-				"publisher": "Microsoft.Azure.Extensions",
-				"type": "CustomScript",
-				"typeHandlerVersion": "2.0",
+				"publisher": "Microsoft.OSTCExtensions",
+				"type": "CustomScriptForLinux",
+				"typeHandlerVersion": "1.4",
 				"autoUpgradeMinorVersion": true,
 				"settings": {
 					"fileUris": [
