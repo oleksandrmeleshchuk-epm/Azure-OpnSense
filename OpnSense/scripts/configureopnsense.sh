@@ -87,8 +87,9 @@ if [ -n "$8" ]; then
 		exit 1
 	fi
 		
-	#Dowload OPNSense Bootstrap and Permit Root Remote Login
+	# Dowload OPNSense Bootstrap and Permit Root Remote Login
 	#fetch https://raw.githubusercontent.com/opnsense/update/dddae7d70e/src/bootstrap/opnsense-bootstrap.sh.in > /dev/null 2>&1
+	# https://github.com/opnsense/update?tab=readme-ov-file#opnsense-bootstrap
 	fetch https://raw.githubusercontent.com/opnsense/update/master/src/bootstrap/opnsense-bootstrap.sh.in > /dev/null 2>&1
 	sed -i "" 's/#PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config;
 	#OPNSense
