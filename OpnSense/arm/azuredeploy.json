@@ -145,8 +145,8 @@
 				"storageProfile": {
 					"imageReference": {
 						"publisher": "thefreebsdfoundation",
-						"offer": "freebsd-14_2",
-						"sku": "14_2-release-amd64-gen2-zfs",
+						"offer": "freebsd-12_4",
+						"sku": "12_4-release",
 						"version": "latest"
                     },
 					"osDisk": {
@@ -173,10 +173,10 @@
 				}
 			},
 			"plan": {
-                "name": "14_2-release-amd64-gen2-zfs",
-                "publisher": "thefreebsdfoundation",
-                "product": "freebsd-14_2"
-            }
+				"name": "12_4-release",
+				"publisher": "thefreebsdfoundation",
+				"product": "freebsd-12_4"
+			}
 		},
 		{
 			"type": "Microsoft.Network/routeTables",

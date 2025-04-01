@@ -134,7 +134,7 @@
 		{
 			"name": "[variables('virtualMachineName')]",
 			"type": "Microsoft.Compute/virtualMachines",
-			"apiVersion": "2017-03-30",
+			"apiVersion": "2021-03-01",
 			"location": "[variables('location')]",
 			"comments": "This is the virtual machine that you're building.",
 			"properties": {
