@@ -171,7 +171,12 @@
 						}
 					]
 				}
-			}
+			},
+			"plan": {
+                "name": "14_2-release-amd64-gen2-zfs",
+                "publisher": "thefreebsdfoundation",
+                "product": "freebsd-14_2"
+            }
 		},
 		{
 			"type": "Microsoft.Network/routeTables",
