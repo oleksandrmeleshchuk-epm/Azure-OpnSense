@@ -13,9 +13,6 @@
 				"description": "VM size, please choose a size which allow 2 NICs."
 			}
 		},
-		"enableAcceleratedNetworking": {
-            "value": true
-        },
 		"NewVirtualMachineNumber": {
 			"type": "string",
 			"defaultValue": "1",

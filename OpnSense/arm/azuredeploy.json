@@ -13,12 +13,6 @@
 				"description": "VM size, please choose a size which allow 2 NICs."
 			}
 		},
-		"enableAcceleratedNetworking": {
-            "value": true
-        },
-		"osDiskType": {
-            "value": "Premium_LRS"
-        },
 		"virtualMachineNumber": {
 			"type": "string",
 			"defaultValue": "1",
