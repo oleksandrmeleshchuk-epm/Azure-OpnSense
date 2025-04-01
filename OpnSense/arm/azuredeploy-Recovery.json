@@ -13,6 +13,9 @@
 				"description": "VM size, please choose a size which allow 2 NICs."
 			}
 		},
+		"enableAcceleratedNetworking": {
+            "value": true
+        },
 		"NewVirtualMachineNumber": {
 			"type": "string",
 			"defaultValue": "1",
@@ -64,12 +67,13 @@
 		},
 		"OpnSenseVersion": {
 			"type": "string",
-			"defaultValue": "21.7",
+			"defaultValue": "25.1",
 			"allowedValues": [
 				"21.7",
 				"21.10",
 				"22.1",
-				"22.7"
+				"22.7",
+				"25.1"
 			],
 			"metadata": {
 				"description": "OpnSense Release version"
@@ -147,9 +151,9 @@
 				},
 				"storageProfile": {
 					"imageReference": {
-						"publisher": "MicrosoftOSTC",
-						"offer": "FreeBSD",
-						"sku": "12.0",
+						"publisher": "thefreebsdfoundation",
+						"offer": "freebsd-12_2",
+						"sku": "12_2-release",
 						"version": "latest"
 					},
 					"osDisk": {

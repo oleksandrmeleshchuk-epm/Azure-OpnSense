@@ -13,6 +13,12 @@
 				"description": "VM size, please choose a size which allow 2 NICs."
 			}
 		},
+		"enableAcceleratedNetworking": {
+            "value": true
+        },
+		"osDiskType": {
+            "value": "Premium_LRS"
+        },
 		"virtualMachineNumber": {
 			"type": "string",
 			"defaultValue": "1",
@@ -62,12 +68,13 @@
 		},
 		"OpnSenseVersion": {
 			"type": "string",
-			"defaultValue": "21.7",
+			"defaultValue": "25.1",
 			"allowedValues": [
 				"21.7",
 				"21.10",
 				"22.1",
-				"22.7"
+				"22.7",
+				"25.1"
 			],
 			"metadata": {
 				"description": "OpnSense Release version"
@@ -143,13 +150,13 @@
 				},
 				"storageProfile": {
 					"imageReference": {
-						"publisher": "MicrosoftOSTC",
-						"offer": "FreeBSD",
-						"sku": "12.0",
+						"publisher": "thefreebsdfoundation",
+						"offer": "freebsd-14_2",
+						"sku": "14_2-release-amd64-gen2-zfs",
 						"version": "latest"
                     },
 					"osDisk": {
-						"createOption": "FromImage",
+						"createOption": "fromImage",
 						"name": "[concat(variables('virtualMachineName'), '-disk')]"
 					},
 					"dataDisks": []
@@ -207,7 +214,7 @@
 		{
 			"type": "Microsoft.Network/virtualNetworks",
 			"name": "[variables('virtualNetworkName')]",
-			"apiVersion": "2017-06-01",
+			"apiVersion": "2024-01-01",
 			"location": "[variables('location')]",
 			"comments": "This will build a Virtual Network.",
 			"dependsOn": [
@@ -295,7 +302,7 @@
 		{
 			"name":"[if(equals(parameters('ProjectName'), 'SecOps'), variables('nic2'), variables('nic1'))]",
 			"type": "Microsoft.Network/networkInterfaces",
-			"apiVersion": "2017-06-01",
+			"apiVersion": "2022-11-01",
 			"location": "[variables('location')]",
 			"comments": "This will be your Primary NIC",
 			"dependsOn": [
@@ -453,7 +460,7 @@
 		{
 			"type": "Microsoft.Compute/virtualMachines/extensions",
 			"name": "[concat(variables('virtualMachineName'), '/', variables('extensionName'))]",
-			"apiVersion": "2015-06-15",
+			"apiVersion": "2024-03-01",
 			"location": "[variables('location')]",
 			"dependsOn": [
 				"[concat('Microsoft.Compute/virtualMachines/', variables('virtualMachineName'))]"
