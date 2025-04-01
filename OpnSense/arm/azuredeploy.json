@@ -459,16 +459,16 @@
 		{
 			"type": "Microsoft.Compute/virtualMachines/extensions",
 			"name": "[concat(variables('virtualMachineName'), '/', variables('extensionName'))]",
-			"apiVersion": "2024-03-01",
+			"apiVersion": "2024-11-01",
 			"location": "[variables('location')]",
 			"dependsOn": [
 				"[concat('Microsoft.Compute/virtualMachines/', variables('virtualMachineName'))]"
 			],
 			"properties": {
-				"publisher": "Microsoft.OSTCExtensions",
-				"type": "CustomScriptForLinux",
-				"typeHandlerVersion": "1.4",
-				"autoUpgradeMinorVersion": false,
+				"publisher": "Microsoft.Azure.Extensions",
+				"type": "CustomScript",
+				"typeHandlerVersion": "2.0",
+				"autoUpgradeMinorVersion": true,
 				"settings": {
 					"fileUris": [
 						"[concat(variables('OPNScriptURI'),variables('ShellScriptName'))]" 
