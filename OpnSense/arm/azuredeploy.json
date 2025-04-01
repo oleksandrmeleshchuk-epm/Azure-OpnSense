@@ -483,7 +483,7 @@
 					"fileUris": [
 						"[concat(variables('OPNScriptURI'),variables('ShellScriptName'))]" 
 					],
-					"commandToExecute": "[concat('sh ',variables('ShellScriptName'),' ',variables('OPNConfigFile'),' ',parameters('OpnSenseVersion'),' ',parameters('ProjectName'),' ',parameters('ProjectNetworkCIDROctet'),' ',parameters('NetworkCIDROctet'),' ',variables('RGName'),' ',variables('virtualMachineName'),' ',variables('TempPassword'),' ',parameters('WALinuxVersion'))]"
+					"commandToExecute": "[concat('sh ', variables('ShellScriptName'), ' ', variables('OPNConfigFile'), ' ', parameters('OpnSenseVersion'), ' ', parameters('ProjectName'), ' ', parameters('ProjectNetworkCIDROctet'), ' ', parameters('NetworkCIDROctet'), ' ', variables('RGName'), ' ', variables('virtualMachineName'), ' ', variables('TempPassword'), ' ', parameters('WALinuxVersion'))]"
 				}             
 			}
 		}
