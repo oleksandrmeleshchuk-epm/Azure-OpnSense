@@ -319,30 +319,70 @@
 		},
 		{
 			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2017-05-10",
-			"comments": "This will add peerings to new Virtual Network.",
+			"apiVersion": "2022-09-01",
 			"name": "[concat(substring(variables('PeeringNetworkName1'), 0, min(30, length(variables('PeeringNetworkName1')))), '-to-', substring(variables('virtualNetworkName'), 0, min(30, length(variables('virtualNetworkName')))))]",
 			"subscriptionId": "[variables('SubIDPeeringNetworkName1')]",
 			"resourceGroup": "[variables('SubIDPeeringRGName1')]",
+			"copy": {
+                "name": "Vnets",
+                "count": "1"
+            },
 			"properties": {
 				"mode": "Incremental",
+				"expressionEvaluationOptions": {
+					"scope": "inner"
+				},
+				"parameters": {
+					"location": {
+						"value": "[variables('LocationPeeringNetworkName1')]"
+					},
+					"PeeringNetworkName": {
+						"value": "[variables('PeeringNetworkName1')]"
+					},
+					"virtualNetworkName": {
+						"value": "[variables('virtualNetworkName')]"
+					},
+					"SubID": {
+						"value": "[variables('SubID')]"
+					},
+					"RGName": {
+						"value": "[variables('RGName')]"
+					}
+				},
 				"template": {
 					"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
 					"contentVersion": "1.0.0.0",
+					"parameters": {
+						"location": {
+							"type": "string"
+						},
+						"PeeringNetworkName": {
+							"type": "string"
+						},
+						"virtualNetworkName": {
+							"type": "string"
+						},
+						"SubID": {
+							"type": "string"
+						},
+						"RGName": {
+							"type": "string"
+						}
+					},
 					"variables": {},
 					"resources": [
 						{
 							"type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
 							"apiVersion": "2024-05-01",
-							"name": "[concat(variables('PeeringNetworkName1'), '-to-', variables('virtualNetworkName'))]",
-							"location": "[variables('LocationPeeringNetworkName1')]",
+							"name": "[concat(parameters('PeeringNetworkName'), '-to-', parameters('virtualNetworkName'))]",
+							"location": "[parameters('location')]",
 							"properties": {
 								"allowVirtualNetworkAccess": true,
 								"allowForwardedTraffic": false,
 								"allowGatewayTransit": false,
 								"useRemoteGateways": false,
 								"remoteVirtualNetwork": {
-									"id": "[concat('/subscriptions/', variables('SubID'), '/resourceGroups/', variables('RGName'), '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+									"id": "[concat('/subscriptions/', parameters('SubID'), '/resourceGroups/', parameters('RGName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
 								}
 							}
 						}
@@ -352,30 +392,70 @@
 		},
 		{
 			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2017-05-10",
-			"comments": "This will add peerings to new Virtual Network.",
+			"apiVersion": "2022-09-01",
 			"name": "[concat(substring(variables('PeeringNetworkName2'), 0, min(30, length(variables('PeeringNetworkName2')))), '-to-', substring(variables('virtualNetworkName'), 0, min(30, length(variables('virtualNetworkName')))))]",
 			"subscriptionId": "[variables('SubIDPeeringNetworkName2')]",
 			"resourceGroup": "[variables('SubIDPeeringRGName2')]",
+			"copy": {
+                "name": "Vnets",
+                "count": "1"
+            },
 			"properties": {
 				"mode": "Incremental",
+				"expressionEvaluationOptions": {
+					"scope": "inner"
+				},
+				"parameters": {
+					"location": {
+						"value": "[variables('LocationPeeringNetworkName2')]"
+					},
+					"PeeringNetworkName": {
+						"value": "[variables('PeeringNetworkName2')]"
+					},
+					"virtualNetworkName": {
+						"value": "[variables('virtualNetworkName')]"
+					},
+					"SubID": {
+						"value": "[variables('SubID')]"
+					},
+					"RGName": {
+						"value": "[variables('RGName')]"
+					}
+				},
 				"template": {
 					"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
 					"contentVersion": "1.0.0.0",
+					"parameters": {
+						"location": {
+							"type": "string"
+						},
+						"PeeringNetworkName": {
+							"type": "string"
+						},
+						"virtualNetworkName": {
+							"type": "string"
+						},
+						"SubID": {
+							"type": "string"
+						},
+						"RGName": {
+							"type": "string"
+						}
+					},
 					"variables": {},
 					"resources": [
 						{
 							"type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
 							"apiVersion": "2024-05-01",
-							"name": "[concat(variables('PeeringNetworkName2'), '-to-', variables('virtualNetworkName'))]",
-							"location": "[variables('LocationPeeringNetworkName2')]",
+							"name": "[concat(parameters('PeeringNetworkName'), '-to-', parameters('virtualNetworkName'))]",
+							"location": "[parameters('location')]",
 							"properties": {
 								"allowVirtualNetworkAccess": true,
 								"allowForwardedTraffic": false,
 								"allowGatewayTransit": false,
 								"useRemoteGateways": false,
 								"remoteVirtualNetwork": {
-									"id": "[concat('/subscriptions/', variables('SubID'), '/resourceGroups/', variables('RGName'), '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+									"id": "[concat('/subscriptions/', parameters('SubID'), '/resourceGroups/', parameters('RGName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
 								}
 							}
 						}
