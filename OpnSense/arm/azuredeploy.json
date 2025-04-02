@@ -230,16 +230,16 @@
 		  "type": "Microsoft.Network/routeTables"
 		},
 		{
-		  "type": "Microsoft.Network/virtualNetworks",
-		  "apiVersion": "2024-05-01",
-		  "comments": "This will build a Virtual Network.",
-		  "dependsOn": [
+			"type": "Microsoft.Network/virtualNetworks",
+			"apiVersion": "2024-05-01",
+			"comments": "This will build a Virtual Network.",
+			"dependsOn": [
 			"[concat('Microsoft.Network/routeTables/', variables('routeTableName'))]",
 			"[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
-		  ],
-		  "location": "[variables('location')]",
-		  "name": "[variables('virtualNetworkName')]",
-		  "properties": {
+			],
+			"location": "[variables('location')]",
+			"name": "[variables('virtualNetworkName')]",
+			"properties": {
 			"addressSpace": {
 			  "addressPrefixes": [
 				"[variables('subnetAddressSpace')]"
@@ -277,8 +277,8 @@
 				}
 			  }
 			]
-		  },
-		  "resources": [
+			},
+			"resources": [
 			{
 			  "type": "virtualNetworkPeerings",
 			  "apiVersion": "2024-05-01",
@@ -321,7 +321,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2017-05-10",
 			"comments": "This will add peerings to new Virtual Network.",
-			"name": "[concat(variables('PeeringNetworkName1'), '-to-', variables('virtualNetworkName'))]",
+			"name": "[concat(substring(variables('PeeringNetworkName1'), 0, 30), '-to-', substring(variables('virtualNetworkName'), 0, 30))]"
 			"subscriptionId": "[variables('SubIDPeeringNetworkName1')]",
 			"resourceGroup": "[variables('SubIDPeeringRGName1')]",
 			"properties": {
@@ -354,7 +354,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2017-05-10",
 			"comments": "This will add peerings to new Virtual Network.",
-			"name": "[concat(variables('PeeringNetworkName2'), '-to-', variables('virtualNetworkName'))]",
+			"name": "[concat(substring(variables('PeeringNetworkName2'), 0, 30), '-to-', substring(variables('virtualNetworkName'), 0, 30))]"
 			"subscriptionId": "[variables('SubIDPeeringNetworkName2')]",
 			"resourceGroup": "[variables('SubIDPeeringRGName2')]",
 			"properties": {
