@@ -321,7 +321,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2017-05-10",
 			"comments": "This will add peerings to new Virtual Network.",
-			"name": "[concat(substring(variables('PeeringNetworkName1'), 0, 30), '-to-', substring(variables('virtualNetworkName'), 0, 30))]"
+			"name": "[concat(substring(variables('PeeringNetworkName1'), 0, 30), '-to-', substring(variables('virtualNetworkName'), 0, 30))]",
 			"subscriptionId": "[variables('SubIDPeeringNetworkName1')]",
 			"resourceGroup": "[variables('SubIDPeeringRGName1')]",
 			"properties": {
@@ -354,7 +354,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2017-05-10",
 			"comments": "This will add peerings to new Virtual Network.",
-			"name": "[concat(substring(variables('PeeringNetworkName2'), 0, 30), '-to-', substring(variables('virtualNetworkName'), 0, 30))]"
+			"name": "[concat(substring(variables('PeeringNetworkName2'), 0, 30), '-to-', substring(variables('virtualNetworkName'), 0, 30))]",
 			"subscriptionId": "[variables('SubIDPeeringNetworkName2')]",
 			"resourceGroup": "[variables('SubIDPeeringRGName2')]",
 			"properties": {
