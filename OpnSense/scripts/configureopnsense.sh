@@ -36,31 +36,14 @@ if [ -n "$8" ]; then
 		fi
 	fi
 
-	# Add Azure waagent
-	fetch https://github.com/Azure/WALinuxAgent/archive/refs/tags/v${9}.tar.gz
-	tar -xvzf v${9}.tar.gz
-	cd WALinuxAgent-${9}/
-	python3 setup.py install --register-service --lnx-distro=freebsd --force
-	cd ..
-
-	# Fix waagent by replacing configuration settings
-	ln -s /usr/local/bin/python3.11 /usr/local/bin/python
-	##sed -i "" 's/command_interpreter="python"/command_interpreter="python3"/' /etc/rc.d/waagent
-	##sed -i "" 's/#!\/usr\/bin\/env python/#!\/usr\/bin\/env python3/' /usr/local/sbin/waagent
-	sed -i "" 's/ResourceDisk.EnableSwap=y/ResourceDisk.EnableSwap=n/' /etc/waagent.conf
-	fetch $1actions_waagent.conf
-	cp actions_waagent.conf /usr/local/opnsense/service/conf/actions.d
-
-	# Installing bash - This is a requirement for Azure custom Script extension to run
-	pkg install -y bash
-	pkg install -y os-frr
-
 	echo "Generating hash from the provided value"
 	#set -o pipefail # if supported by your shell
 	# PASSWD=$(curl -s -X POST --data "password=${8}&cost=10" https://bcrypt.org/api/generate-hash.json | jq -r '.hash') || exit
-	# New address https://www.toptal.com/developers/bcrypt/
-	PASSWD=$(curl -s -X POST --data "password=${8}&cost=10" https://www.toptal.com/developers/bcrypt/api/generate-hash.json | jq -r '.hash') || exit
-	
+	# API no longer working
+	fetch https://pkg.freebsd.org/FreeBSD:14:amd64/latest/All/py311-bcrypt-3.2.2_1.pkg
+	pkg install py311-bcrypt-3.2.2_1.pkg
+	PASSWD=$(python3 -c "import bcrypt, sys; print(bcrypt.hashpw(sys.stdin.read().strip().encode(), bcrypt.gensalt(10)).decode())" <<< "${8}") || exit
+
 	if [ -n "$PASSWD" ]; then
 		echo "PASSWD variable set to $PASSWD, proceeding";
 		fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/${1} > /dev/null 2>&1
@@ -121,6 +104,87 @@ if [ -n "$8" ]; then
 	if [ -f /usr/local/etc/config.xml ]; then
 		echo "Starting OpnSense installation"
 		sh opnsense-bootstrap.sh.in -y -r ${2};
+		
+		# Installing bash - This is a requirement for Azure custom Script extension to run
+		pkg install -y bash
+		pkg install -y os-frr
+		
+		# Add Azure waagent
+		fetch https://github.com/Azure/WALinuxAgent/archive/refs/tags/v${9}.tar.gz
+		tar -xvzf v${9}.tar.gz
+		cd WALinuxAgent-${9}/
+		python3 setup.py install --register-service --lnx-distro=freebsd --force
+		cd ..
+
+		# Fix waagent by replacing configuration settings
+		TARGET="/usr/local/bin/python"
+		# Source python version
+		SOURCE="/usr/local/bin/python3.11"
+
+		# Check if target exists
+		if [ -e "$TARGET" ]; then
+			# Get versions of both python binaries
+			SOURCE_VERSION=$("$SOURCE" --version 2>&1)
+			TARGET_VERSION=$("$TARGET" --version 2>&1)
+			
+			# Compare versions
+			if [ "$SOURCE_VERSION" = "$TARGET_VERSION" ]; then
+				echo "Symlink not needed: $TARGET already exists and points to same version ($TARGET_VERSION)"
+				exit 0
+			else
+				echo "Warning: $TARGET exists but has different version ($TARGET_VERSION) than $SOURCE ($SOURCE_VERSION)"
+				echo "Remove existing $TARGET first if you want to replace it"
+				exit 1
+			fi
+		fi
+
+		# If we get here, target doesn't exist, so create the symlink
+		ln -s "$SOURCE" "$TARGET"
+		if [ $? -eq 0 ]; then
+			echo "Successfully created symlink: $TARGET -> $SOURCE"
+		else
+			echo "Failed to create symlink"
+			exit 1
+		fi
+		##sed -i "" 's/command_interpreter="python"/command_interpreter="python3"/' /etc/rc.d/waagent
+		##sed -i "" 's/#!\/usr\/bin\/env python/#!\/usr\/bin\/env python3/' /usr/local/sbin/waagent
+		sed -i "" 's/ResourceDisk.EnableSwap=y/ResourceDisk.EnableSwap=n/' /etc/waagent.conf
+		
+		FOLDER="/usr/local/opnsense/service/conf/actions.d"  # Change this to your desired folder
+
+		# Check if folder exists
+		if [ -d "$FOLDER" ]; then
+			echo "Folder $FOLDER exists, proceeding to create file..."
+		else
+			echo "Folder $FOLDER does not exist, creating it..."
+			mkdir -p "$FOLDER"
+		fi
+		cat << 'EOF' > /usr/local/opnsense/service/conf/actions.d/waagent_service.conf
+[start]
+command:service
+parameters:waagent start
+type:script
+message:starting waagent
+
+[stop]
+command:service
+parameters:waagent stop
+type:script
+message:stopping waagent
+
+[restart]
+command:service
+parameters:waagent restart
+type:script
+message:restarting waagent
+
+[status]
+command:service
+parameters:waagent status
+type:script_output
+message:status waagent
+EOF
+		
 		#Adds support to LB probe from IP 168.63.129.16
 		fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/scripts/lb-conf.sh > /dev/null 2>&1
 		sh ./lb-conf.sh
