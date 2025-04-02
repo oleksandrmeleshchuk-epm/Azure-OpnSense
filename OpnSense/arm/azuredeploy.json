@@ -102,6 +102,7 @@
 		"PeeringNetwork2RGName": "ABB-nMarket-Logging-and-Monitoring",
 		"PeeringNetwork2SubID": "37563f69-f5ca-443e-a71f-df1a7acb739f",
 		"extensionName":"CustomScript",
+		"SubID": "[subscription().subscriptionId]",
 		"RGName": "[toLower(resourceGroup().name)]",
 		"diagnosticsStorageAccountName": "nmrktlogandmondev",
 		"virtualNetworkName": "[concat(variables('RGName'), '-vnet')]",
@@ -273,7 +274,7 @@
 					}
 				]
 			},
-			"resources":[
+			"resources": [
 				{
 					"type":"virtualNetworkPeerings",
 					"apiVersion":"2024-05-01",
@@ -312,6 +313,42 @@
 				}
 			]
 		},
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(variables('PeeringNetworkName1'), '-to-', variables('virtualNetworkName'))]",
+            "location": "[SubIDPeeringRGName1().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+            ],
+            "properties": {
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": false,
+                "allowGatewayTransit": false,
+                "useRemoteGateways": false,
+                "remoteVirtualNetwork": {
+                    "id": "[concat('/subscriptions/', variables('SubID'), '/resourceGroups/', variables('RGName'), '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+                }
+            }
+        },
+		{
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2024-05-01",
+            "name": "[concat(variables('PeeringNetworkName2'), '-to-', variables('virtualNetworkName'))]",
+            "location": "[SubIDPeeringRGName2().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+            ],
+            "properties": {
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": false,
+                "allowGatewayTransit": false,
+                "useRemoteGateways": false,
+                "remoteVirtualNetwork": {
+                    "id": "[concat('/subscriptions/', variables('SubID'), '/resourceGroups/', variables('RGName'), '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+                }
+            }
+        },
 		{
 			"name":"[if(equals(parameters('ProjectName'), 'SecOps'), variables('nic2'), variables('nic1'))]",
 			"type": "Microsoft.Network/networkInterfaces",

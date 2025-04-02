@@ -19,29 +19,20 @@ if [ -n "$8" ]; then
 	# 2. Install bash to support Azure Backup integration
 	env ASSUME_ALWAYS_YES=YES pkg bootstrap -f; pkg update -f
 	env ASSUME_ALWAYS_YES=YES pkg install ca_root_nss && pkg install -y bash 
-	
-	if ( `! pkg info jq` ); then
-		pkg install -y jq;
-		if ! pkg info jq ; then
-			echo "Package jq missing, exiting. Please check package availability"
-			exit 1
-		fi
-	fi
-	
-	if ( `! pkg info curl` ); then
-		pkg install -y curl;
-		if ! pkg info curl ; then
-			echo "Package curl missing, exiting. Please check package availability"
-			exit 1
-		fi
-	fi
 
+	fetch https://pkg.freebsd.org/FreeBSD:14:amd64/latest/All/py311-bcrypt-3.2.2_1.pkg
+	if ( `! pkg info py311-bcrypt` ); then
+		pkg install -y py311-bcrypt-3.2.2_1.pkg
+		if ! pkg info py311-bcrypt ; then
+			echo "Package py311-bcrypt missing, exiting. Please check package availability"
+			exit 1
+		fi
+	fi
+	
 	echo "Generating hash from the provided value"
 	#set -o pipefail # if supported by your shell
 	# PASSWD=$(curl -s -X POST --data "password=${8}&cost=10" https://bcrypt.org/api/generate-hash.json | jq -r '.hash') || exit
 	# API no longer working
-	fetch https://pkg.freebsd.org/FreeBSD:14:amd64/latest/All/py311-bcrypt-3.2.2_1.pkg
-	pkg install py311-bcrypt-3.2.2_1.pkg
 	PASSWD=$(echo "${8}" | python3 -c "import bcrypt, sys; print(bcrypt.hashpw(sys.stdin.read().strip().encode(), bcrypt.gensalt(10)).decode())") || exit
 
 	if [ -n "$PASSWD" ]; then
@@ -49,7 +40,7 @@ if [ -n "$8" ]; then
 		fetch https://raw.githubusercontent.com/oleksandrmeleshchuk-epm/Azure-OpnSense/main/OpnSense/configs/${3}/${1} > /dev/null 2>&1
 	else
 		echo "PASSWD variable is empty, trying another way" 
-		curl -s -X POST --data "password=${8}&cost=10" https://bcrypt.org/api/generate-hash.json |  jq -r '.hash'> ./hash;
+		echo "${8}" | python3 -c "import bcrypt, sys; print(bcrypt.hashpw(sys.stdin.read().strip().encode(), bcrypt.gensalt(10)).decode())" > ./hash;
 		env PASSWD=`cat "./hash"`
 		if [ -n "$PASSWD" ]; then
 			echo "PASSWD variable set to $PASSWD, proceeding";
@@ -106,7 +97,6 @@ if [ -n "$8" ]; then
 		sh opnsense-bootstrap.sh.in -y -r ${2};
 		
 		# Installing bash - This is a requirement for Azure custom Script extension to run
-		pkg install -y bash
 		pkg install -y os-frr
 		
 		# Add Azure waagent
