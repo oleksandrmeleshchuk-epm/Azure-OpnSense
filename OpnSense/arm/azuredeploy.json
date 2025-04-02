@@ -315,6 +315,8 @@
 		},
 		{
 			"type": "Microsoft.Network/virtualNetworks",
+			"name": "[variables('PeeringNetworkName1')]",
+			"location": "[SubIDPeeringRGName1().location]",
 			"apiVersion": "2024-01-01",
 			"comments": "This will add peerings to new Virtual Network.",
 			"resources": [
@@ -335,7 +337,16 @@
 							"id": "[concat('/subscriptions/', variables('SubID'), '/resourceGroups/', variables('RGName'), '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
 						}
 					}
-				},
+				}
+			]
+		},
+		{
+			"type": "Microsoft.Network/virtualNetworks",
+			"name": "[variables('PeeringNetworkName2')]",
+			"location": "[PeeringNetworkName2().location]",
+			"apiVersion": "2024-01-01",
+			"comments": "This will add peerings to new Virtual Network.",
+			"resources": [
 				{
 					"type": "virtualNetworkPeerings",
 					"apiVersion": "2024-05-01",
