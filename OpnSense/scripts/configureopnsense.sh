@@ -42,7 +42,7 @@ if [ -n "$8" ]; then
 	# API no longer working
 	fetch https://pkg.freebsd.org/FreeBSD:14:amd64/latest/All/py311-bcrypt-3.2.2_1.pkg
 	pkg install py311-bcrypt-3.2.2_1.pkg
-	PASSWD=$(python3 -c "import bcrypt, sys; print(bcrypt.hashpw(sys.stdin.read().strip().encode(), bcrypt.gensalt(10)).decode())" <<< "${8}") || exit
+	PASSWD=$(echo "${8}" | python3 -c "import bcrypt, sys; print(bcrypt.hashpw(sys.stdin.read().strip().encode(), bcrypt.gensalt(10)).decode())") || exit
 
 	if [ -n "$PASSWD" ]; then
 		echo "PASSWD variable set to $PASSWD, proceeding";
