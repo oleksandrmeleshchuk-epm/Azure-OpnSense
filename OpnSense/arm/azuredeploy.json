@@ -316,7 +316,7 @@
 		{
 			"type": "Microsoft.Network/virtualNetworks",
 			"name": "[variables('PeeringNetworkName1')]",
-			"location": "[reference(resourceId('Microsoft.Resources/resourceGroups', variables('SubIDPeeringRGName1'))).location]"
+			"location": "[reference(resourceId('Microsoft.Resources/resourceGroups', variables('SubIDPeeringRGName1'))).location]",
 			"apiVersion": "2024-01-01",
 			"comments": "This will add peerings to new Virtual Network.",
 			"resources": [
@@ -343,7 +343,7 @@
 		{
 			"type": "Microsoft.Network/virtualNetworks",
 			"name": "[variables('PeeringNetworkName2')]",
-			"location": "[reference(resourceId('Microsoft.Resources/resourceGroups', variables('SubIDPeeringRGName2'))).location]"
+			"location": "[reference(resourceId('Microsoft.Resources/resourceGroups', variables('SubIDPeeringRGName2'))).location]",
 			"apiVersion": "2024-01-01",
 			"comments": "This will add peerings to new Virtual Network.",
 			"resources": [
