@@ -313,42 +313,49 @@
 				}
 			]
 		},
-        {
-            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
-            "apiVersion": "2024-05-01",
-            "name": "[concat(variables('PeeringNetworkName1'), '-to-', variables('virtualNetworkName'))]",
-            "location": "[SubIDPeeringRGName1().location]",
-            "dependsOn": [
-                "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
-            ],
-            "properties": {
-                "allowVirtualNetworkAccess": true,
-                "allowForwardedTraffic": false,
-                "allowGatewayTransit": false,
-                "useRemoteGateways": false,
-                "remoteVirtualNetwork": {
-                    "id": "[concat('/subscriptions/', variables('SubID'), '/resourceGroups/', variables('RGName'), '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
-                }
-            }
-        },
 		{
-            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
-            "apiVersion": "2024-05-01",
-            "name": "[concat(variables('PeeringNetworkName2'), '-to-', variables('virtualNetworkName'))]",
-            "location": "[SubIDPeeringRGName2().location]",
-            "dependsOn": [
-                "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
-            ],
-            "properties": {
-                "allowVirtualNetworkAccess": true,
-                "allowForwardedTraffic": false,
-                "allowGatewayTransit": false,
-                "useRemoteGateways": false,
-                "remoteVirtualNetwork": {
-                    "id": "[concat('/subscriptions/', variables('SubID'), '/resourceGroups/', variables('RGName'), '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
-                }
-            }
-        },
+			"type": "Microsoft.Network/virtualNetworks",
+			"apiVersion": "2024-01-01",
+			"comments": "This will add peerings to new Virtual Network.",
+			"resources": [
+				{
+					"type": "virtualNetworkPeerings",
+					"apiVersion": "2024-05-01",
+					"name": "[concat(variables('PeeringNetworkName1'), '-to-', variables('virtualNetworkName'))]",
+					"location": "[SubIDPeeringRGName1().location]",
+					"dependsOn": [
+						"[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+					],
+					"properties": {
+						"allowVirtualNetworkAccess": true,
+						"allowForwardedTraffic": false,
+						"allowGatewayTransit": false,
+						"useRemoteGateways": false,
+						"remoteVirtualNetwork": {
+							"id": "[concat('/subscriptions/', variables('SubID'), '/resourceGroups/', variables('RGName'), '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+						}
+					}
+				},
+				{
+					"type": "virtualNetworkPeerings",
+					"apiVersion": "2024-05-01",
+					"name": "[concat(variables('PeeringNetworkName2'), '-to-', variables('virtualNetworkName'))]",
+					"location": "[SubIDPeeringRGName2().location]",
+					"dependsOn": [
+						"[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+					],
+					"properties": {
+						"allowVirtualNetworkAccess": true,
+						"allowForwardedTraffic": false,
+						"allowGatewayTransit": false,
+						"useRemoteGateways": false,
+						"remoteVirtualNetwork": {
+							"id": "[concat('/subscriptions/', variables('SubID'), '/resourceGroups/', variables('RGName'), '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+						}
+					}
+				}
+			]
+		},
 		{
 			"name":"[if(equals(parameters('ProjectName'), 'SecOps'), variables('nic2'), variables('nic1'))]",
 			"type": "Microsoft.Network/networkInterfaces",
