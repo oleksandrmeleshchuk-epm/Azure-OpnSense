@@ -283,6 +283,7 @@
 				"type": "virtualNetworkPeerings",
 				"apiVersion": "2024-05-01",
 				"name": "[concat(variables('virtualNetworkName'), '-to-', variables('PeeringNetworkName1'))]",
+				"condition": "[not(equals(parameters('ProjectName'), 'Default'))]",
 				"location": "[resourceGroup().location]",
 				"dependsOn": [
 					"[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
@@ -301,6 +302,7 @@
 				"type": "virtualNetworkPeerings",
 				"apiVersion": "2024-05-01",
 				"name": "[concat(variables('virtualNetworkName'), '-to-', variables('PeeringNetworkName2'))]",
+				"condition": "[not(equals(parameters('ProjectName'), 'Default'))]",
 				"location": "[resourceGroup().location]",
 				"dependsOn": [
 					"[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
