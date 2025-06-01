@@ -39,7 +39,8 @@ if [ -n "$8" ]; then
 	#set -o pipefail # if supported by your shell
 	# PASSWD=$(curl -s -X POST --data "password=${8}&cost=10" https://bcrypt.org/api/generate-hash.json | jq -r '.hash') || exit
 	# API no longer working
-	PASSWD=$(echo "${8}" | python3 -c "import bcrypt, sys; print(bcrypt.hashpw(sys.stdin.read().strip().encode(), bcrypt.gensalt(10)).decode())") || exit
+	#PASSWD=$(echo "${8}" | python3 -c "import bcrypt, sys; print(bcrypt.hashpw(sys.stdin.read().strip().encode(), bcrypt.gensalt(10)).decode())") || { echo "Failed to hash password"; exit 1; }
+	PASSWD=$($PYTHON -c "import bcrypt, sys; print(bcrypt.hashpw(sys.argv[1].encode(), bcrypt.gensalt(10)).decode())" "${8}") || { echo "Failed to hash password"; exit 1; }
 
 	if [ -n "$PASSWD" ]; then
 		echo "PASSWD variable set to $PASSWD, proceeding";
