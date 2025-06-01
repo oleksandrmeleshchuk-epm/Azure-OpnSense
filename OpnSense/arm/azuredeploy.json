@@ -37,7 +37,7 @@
 		},
 		"PublicIPAddressSku": {
 			"type": "string",
-			"defaultValue": "Basic",
+			"defaultValue": "Standard",
 			"allowedValues": [
 				"Basic",
 				"Standard"
@@ -377,7 +377,7 @@
 						{
 							"type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
 							"apiVersion": "2024-05-01",
-							"name": "[concat(parameters('PeeringNetworkName'), '-to-', parameters('virtualNetworkName'))]",
+							"name": "[concat(parameters('PeeringNetworkName'), '/', parameters('PeeringNetworkName'), '-to-', parameters('virtualNetworkName'))]",
 							"location": "[parameters('location')]",
 							"properties": {
 								"allowVirtualNetworkAccess": true,
@@ -451,7 +451,7 @@
 						{
 							"type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
 							"apiVersion": "2024-05-01",
-							"name": "[concat(parameters('PeeringNetworkName'), '-to-', parameters('virtualNetworkName'))]",
+							"name": "[concat(parameters('PeeringNetworkName'), '/', parameters('PeeringNetworkName'), '-to-', parameters('virtualNetworkName'))]",
 							"location": "[parameters('location')]",
 							"properties": {
 								"allowVirtualNetworkAccess": true,
