@@ -20,14 +20,20 @@ if [ -n "$8" ]; then
 	env ASSUME_ALWAYS_YES=YES pkg bootstrap -f; pkg update -f
 	env ASSUME_ALWAYS_YES=YES pkg install ca_root_nss && pkg install -y bash 
 
-	fetch https://pkg.freebsd.org/FreeBSD:14:amd64/latest/All/py311-bcrypt-3.2.2_1.pkg
-	if ( `! pkg info py311-bcrypt` ); then
-		pkg install -y py311-bcrypt-3.2.2_1.pkg
-		if ! pkg info py311-bcrypt ; then
-			echo "Package py311-bcrypt missing, exiting. Please check package availability"
-			exit 1
-		fi
-	fi
+	# Install required packages
+	pkg install -y python311 py311-pycparser py311-cffi py311-bcrypt || { echo "Failed to install packages"; exit 1; }
+
+	# Install required packages
+	pkg install -y python311 py311-pycparser py311-cffi py311-bcrypt || { echo "Failed to install packages"; exit 1; }
+
+	# Ensure Python environment is set up
+	PYTHON=/usr/local/bin/python3.11
+	$PYTHON -m ensurepip --upgrade || { echo "Failed to set up pip"; exit 1; }
+	$PYTHON -m pip install --upgrade pip || { echo "Failed to upgrade pip"; exit 1; }
+	$PYTHON -m pip install bcrypt || { echo "Failed to install bcrypt via pip"; exit 1; }
+
+	# Verify bcrypt installation
+	$PYTHON -c "import bcrypt; print('bcrypt module is installed successfully')" || { echo "bcrypt module not found"; exit 1; }
 	
 	echo "Generating hash from the provided value"
 	#set -o pipefail # if supported by your shell

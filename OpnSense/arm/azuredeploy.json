@@ -645,6 +645,25 @@
 					"commandToExecute": "[concat('sh ',variables('ShellScriptName'),' ',variables('OPNConfigFile'),' ',parameters('OpnSenseVersion'),' ',parameters('ProjectName'),' ',parameters('ProjectNetworkCIDROctet'),' ',parameters('NetworkCIDROctet'),' ',variables('RGName'),' ',variables('virtualMachineName'),' ',variables('TempPassword'),' ',parameters('WALinuxVersion'))]"
 				}
 			}
+		},
+		{
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2022-09-01",
+			"name": "logTempPassword",
+			"properties": {
+				"mode": "Incremental",
+				"template": {
+					"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+					"contentVersion": "1.0.0.0",
+					"resources": [],
+					"outputs": {
+						"tempPasswordLog": {
+							"type": "string",
+							"value": "[variables('TempPassword')]"
+						}
+					}
+				}
+			}
 		}
 	],
 	"outputs": {
