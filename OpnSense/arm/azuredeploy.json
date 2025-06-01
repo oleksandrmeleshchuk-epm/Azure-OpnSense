@@ -397,6 +397,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2022-09-01",
 			"name": "[concat(substring(variables('PeeringNetworkName2'), 0, min(30, length(variables('PeeringNetworkName2')))), '-to-', substring(variables('virtualNetworkName'), 0, min(30, length(variables('virtualNetworkName')))))]",
+			"condition": "[not(equals(parameters('ProjectName'), 'Default'))]",
 			"subscriptionId": "[variables('SubIDPeeringNetworkName2')]",
 			"resourceGroup": "[variables('SubIDPeeringRGName2')]",
 			"copy": {
