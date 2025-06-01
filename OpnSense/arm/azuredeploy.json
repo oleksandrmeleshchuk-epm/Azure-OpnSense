@@ -328,7 +328,7 @@
 			"resourceGroup": "[variables('SubIDPeeringRGName1')]",
 			"copy": {
                 "name": "Vnets",
-                "count": "1"
+                "count": 1
             },
 			"properties": {
 				"mode": "Incremental",
